@@ -143,7 +143,7 @@ app.post('/api/logout', auth, async (req, res, next) => {
   } catch (e) { next(e); }
 });
 
-app.post('/api/technicians', auth, async (req, res, next) => {
+app.post('/api/technicians', async (req, res, next) => {
   try {
     const { name, password, adminPassword } = req.body || {};
     if (String(adminPassword || '') !== ADMIN_PASSWORD) return res.status(403).json({ error: 'Senha de administrador incorreta.' });
