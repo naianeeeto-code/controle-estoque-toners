@@ -162,6 +162,47 @@ app.post('/api/technicians', async (req, res, next) => {
 });
 
 app.get('/api/state', auth, async (req, res, next) => {
+
+app.get('/api/technicians', auth, async (req, res, next) => {
+  try {
+    if (req.user.id !== 'admin') {
+      return res.status(403).json({ error: 'Apenas o administrador pode visualizar os técnicos.' });
+    }
+
+    const { rows } = await pool.query(
+      'SELECT id, name, created_at FROM technicians ORDER BY name ASC'
+    );
+
+    res.json({ technicians: rows });
+  } catch (e) {
+    next(e);
+  }
+});
+
+app.delete('/api/technicians/:id', auth, async (req, res, next) => {
+  try {
+    if (req.user.id !== 'admin') {
+      return res.status(403).json({ error: 'Apenas o administrador pode excluir técnicos.' });
+    }
+
+    const { id } = req.params;
+
+    const result = await pool.query(
+      'DELETE FROM technicians WHERE id=$1 RETURNING id, name',
+      [id]
+    );
+
+    if (!result.rows.length) {
+      return res.status(404).json({ error: 'Técnico não encontrado.' });
+    }
+
+    res.json({ ok: true, technician: result.rows[0] });
+  } catch (e) {
+    next(e);
+  }
+});
+
+  
   try { res.json(await getState()); } catch (e) { next(e); }
 });
 app.put('/api/state', auth, async (req, res, next) => {
