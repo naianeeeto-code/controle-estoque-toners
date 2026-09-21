@@ -1,2526 +1,3802 @@
-<html lang="pt-BR">  
-<head>  
-<meta charset="UTF-8">  
-<meta name="viewport" content="width=device-width, initial-scale=1.0">  
-<title>Controle de Estoque de Toners</title>  <style>  
-*{box-sizing:border-box}  
-body{margin:0;font-family:Arial,sans-serif;background:#f3f5f7;color:#222}  
-header{background:#263238;color:#fff;padding:20px}  
-.header-top{display:flex;align-items:center;justify-content:space-between;gap:16px;max-width:1200px;margin:0 auto}  
-header h1{margin:0;font-size:24px;line-height:1.2}  
-#btnSair{background:#c62828;color:#fff;border:0;border-radius:9px;padding:10px 16px;font-weight:700;font-size:14px;cursor:pointer;white-space:nowrap;box-shadow:0 2px 5px #0003}  
-#btnSair:active{transform:scale(.98)}  
-header p{max-width:1200px;margin:7px auto 0;color:#cfd8dc}  
-header p{margin:0;color:#cfd8dc}  
-.container{max-width:1200px;margin:20px auto;padding:0 15px}  
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}  
-.card{background:#fff;border-radius:10px;padding:16px;box-shadow:0 2px 7px #0001}  
-.card b{display:block;font-size:25px;margin-top:5px}  
-.card.alert b{color:#d32f2f}  
-.panel{background:#fff;border-radius:10px;padding:18px;margin-bottom:18px;box-shadow:0 2px 7px #0001}  
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}  
-label{font-size:13px;font-weight:bold;display:block;margin-bottom:5px}  
-input,select,textarea{width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:14px}  
-textarea{resize:vertical}  
-.full{grid-column:1/-1}  
-.buttons{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}  
-button{border:0;border-radius:6px;padding:10px 14px;cursor:pointer;font-weight:bold}  
-.primary{background:#1976d2;color:#fff}  
-.success{background:#2e7d32;color:#fff}  
-.warning{background:#f9a825;color:#111}  
-.danger{background:#d32f2f;color:#fff}  
-.secondary{background:#607d8b;color:#fff}  
-.search{margin-bottom:12px}  
-.table-wrap{overflow:auto}  
-table{width:100%;border-collapse:collapse;min-width:850px}  
-th,td{padding:10px;border-bottom:1px solid #eee;text-align:left;font-size:13px}  
-th{background:#eceff1}  
-.low{color:#d32f2f;font-weight:bold}  
-.ok{color:#2e7d32;font-weight:bold}  
-.actions button{padding:6px 8px;margin:2px;font-size:12px}  
-.modal{display:none;position:fixed;inset:0;background:#0008;align-items:center;justify-content:center;padding:15px}  
-.modal.show{display:flex}  
-.modal-box{background:#fff;border-radius:10px;padding:20px;width:min(600px,100%);max-height:90vh;overflow:auto}  
-.history{max-height:300px;overflow:auto}  
-.empty{text-align:center;color:#777;padding:25px}  
-  
-@media(max-width:800px){  
-  .cards{grid-template-columns:repeat(2,1fr)}  
-  .grid{grid-template-columns:1fr 1fr}  
-}  
-  
-@media(max-width:520px){  
-  .cards{grid-template-columns:1fr 1fr}  
-  .grid{grid-template-columns:1fr}  
-}  
-  
-/* Layout responsivo para celular */  
-@media (max-width: 700px){  
-  body{font-size:14px}  
-  header{padding:14px 12px 16px}  
-  .header-top{gap:8px;align-items:center}  
-  header h1{font-size:19px;line-height:1.18}  
-  #btnSair{padding:9px 12px;font-size:13px;border-radius:8px}  
-  header p{font-size:13px;line-height:1.35;margin-top:8px}  
-  header{padding:16px}  
-  header h1{font-size:20px}  
-  .container{margin:10px auto;padding:0 10px}  
-  .cards{grid-template-columns:1fr 1fr;gap:8px}  
-  .card{padding:12px}  
-  .card b{font-size:21px}  
-  .panel{padding:14px;border-radius:10px;margin-bottom:12px}  
-  .panel h2{font-size:20px;margin-top:4px}  
-  .grid{grid-template-columns:1fr;gap:10px}  
-  .full{grid-column:auto}  
-  .buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px}  
-  .buttons button{width:100%;min-height:42px}  
-  .search{height:44px}  
-  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}  
-  table{min-width:720px}  
-  
-  #tabela tr.printer-group{  
-    display:block;  
-    border:0;  
-    margin:12px 0 5px;  
-    padding:0;  
-    background:transparent;  
-  }  
-  
-  #tabela tr.printer-group td{  
-    display:block;  
-    width:100%;  
-    border-radius:8px;  
-    background:#eaf2f8;  
-    font-size:15px;  
-  }  
-  
-  #tabela tr:not(.printer-group){  
-    display:grid;  
-    grid-template-columns:38px 1fr 1fr;  
-    gap:2px;  
-    border:1px solid #ddd;  
-    border-radius:8px;  
-    margin-bottom:8px;  
-    padding:8px;  
-    background:#fff;  
-    cursor:pointer;  
-  }  
-  
-  #tabela tr:not(.printer-group) td{  
-    border:0;  
-    padding:5px;  
-    display:block;  
-    min-width:0;  
-    overflow-wrap:anywhere;  
-  }  
-  
-  #tabela tr:not(.printer-group) td:first-child{  
-    grid-row:1 / span 3;  
-    display:flex;  
-    align-items:center;  
-    justify-content:center;  
-  }  
-  
-  #tabela tr:not(.printer-group) td:nth-child(2)::before{  
-    content:"Código: ";  
-    font-weight:bold  
-  }  
-  
-  #tabela tr:not(.printer-group) td:nth-child(3)::before{  
-    content:"Cor: ";  
-    font-weight:bold  
-  }  
-  
-  #tabela tr:not(.printer-group) td:nth-child(4)::before{  
-    content:"Qtd.: ";  
-    font-weight:bold  
-  }  
-  
-  #tabela tr:not(.printer-group) td:nth-child(5){  
-    grid-column:2/-1  
-  }  
-  
-  #tabela tr:not(.printer-group) td:nth-child(5)::before{  
-    content:"Local: ";  
-    font-weight:bold  
-  }  
-  
-  #tabela tr:not(.printer-group) td:nth-child(6){  
-    grid-column:2/-1  
-  }  
-  
-  #tabela tr:not(.printer-group) td:nth-child(6)::before{  
-    content:"Obs.: ";  
-    font-weight:bold  
-  }  
-  
-  #tabela tr:not(.printer-group) td:last-child{  
-    grid-column:2/-1  
-  }  
-  
-  #tabela .actions{  
-    display:flex;  
-    gap:5px  
-  }  
-  
-  #tabela .actions button{  
-    width:auto;  
-    min-height:38px  
-  }  
-  
-  #tabela input[type="radio"]{  
-    width:22px;  
-    height:22px  
-  }  
-}  
-  
-@media (max-width:700px){  
-  #tabela tr:not(.printer-group):has(input[type="radio"]:checked){  
-    border:2px solid #1976d2;  
-    background:#eef6ff;  
-  }  
-}  
-  
-/* Tela de login */  
-.login-screen{  
-  position:fixed;  
-  inset:0;  
-  background:linear-gradient(135deg,#1976d2,#0d47a1);  
-  display:flex;  
-  align-items:center;  
-  justify-content:center;  
-  padding:20px;  
-  z-index:9999  
-}  
-  
-.login-box{  
-  width:100%;  
-  max-width:380px;  
-  background:#fff;  
-  border-radius:16px;  
-  padding:30px;  
-  box-shadow:0 12px 40px rgba(0,0,0,.25)  
-}  
-  
-.login-box h1{  
-  text-align:center;  
-  margin:0 0 8px;  
-  color:#1976d2;  
-  font-size:25px  
-}  
-  
-.login-box p{  
-  text-align:center;  
-  color:#666;  
-  margin:0 0 24px  
-}  
-  
-.login-box label{  
-  display:block;  
-  font-weight:600;  
-  margin:12px 0 6px  
-}  
-  
-.login-box input{  
-  width:100%;  
-  box-sizing:border-box;  
-  padding:12px;  
-  border:1px solid #ccc;  
-  border-radius:8px;  
-  font-size:16px  
-}  
-  
-.login-btn{  
-  width:100%;  
-  margin-top:20px;  
-  padding:12px;  
-  border:0;  
-  border-radius:8px;  
-  background:#1976d2;  
-  color:#fff;  
-  font-size:16px;  
-  font-weight:700;  
-  cursor:pointer  
-}  
-  
-.login-error{  
-  display:none;  
-  color:#c62828;  
-  text-align:center;  
-  margin-top:12px;  
-  font-size:14px  
-}  
-  
-body.sistema-bloqueado>header,  
-body.sistema-bloqueado>.container,  
-body.sistema-bloqueado>.modal{  
-  display:none  
-}  
-  
-/* Gerenciamento de técnicos */  
-#painelTecnicos{  
-  display:none  
-}  
-  
-.lista-tecnicos{  
-  display:grid;  
-  gap:10px  
-}  
-  
-.tecnico-item{  
-  display:flex;  
-  align-items:center;  
-  justify-content:space-between;  
-  gap:12px;  
-  padding:12px;  
-  border:1px solid #ddd;  
-  border-radius:8px;  
-  background:#f8f9fa  
-}  
-  
-.tecnico-info strong{  
-  display:block;  
-  font-size:15px  
-}  
-  
-.tecnico-info small{  
-  color:#666;  
-  font-size:12px  
-}  
-  
-@media(max-width:520px){  
-  .tecnico-item{  
-    align-items:flex-start;  
-    flex-direction:column  
-  }  
-  
-  .tecnico-item button{  
-    width:100%  
-  }  
-}  
-</style>  </head>  <body class="sistema-bloqueado">  <div class="login-screen" id="loginScreen">  
-  <div class="login-box">  <h1>📦 Controle de Estoque</h1>  
-<p>Prefeitura de Grajaú-MA</p>  
-
-<div id="loginArea">  
-  <form id="loginForm">  
-
-    <label for="loginUsuario">  
-      Nome do técnico / usuário  
-    </label>  
-
-    <input  
-      id="loginUsuario"  
-      autocomplete="username"  
-      required  
-      placeholder="Digite o nome"  
-    >  
-
-    <label for="loginSenha">  
-      Senha de 4 dígitos  
-    </label>  
-
-    <input  
-      id="loginSenha"  
-      type="password"  
-      inputmode="numeric"  
-      maxlength="4"  
-      pattern="\d{4}"  
-      autocomplete="current-password"  
-      required  
-      placeholder="Digite a senha"  
-    >  
-
-    <label style="display:flex;align-items:center;gap:8px;font-weight:500;margin-top:12px">  
-      <input  
-        id="ficarLogado"  
-        type="checkbox"  
-        style="width:18px;height:18px"  
-      >  
-      Permanecer logado neste aparelho  
-    </label>  
-
-    <button class="login-btn" type="submit">  
-      🔐 Entrar  
-    </button>  
-
-    <button  
-      class="secondary"  
-      type="button"  
-      style="width:100%;margin-top:10px"  
-      onclick="mostrarCadastroTecnico()"  
-    >  
-      👤 Cadastrar técnico  
-    </button>  
-
-    <div class="login-error" id="loginErro">  
-      Nome ou senha incorretos.  
-    </div>  
-
-  </form>  
-</div>  
-
-<div id="cadastroTecnicoArea" style="display:none">  
-
-  <h2 style="text-align:center;margin:0 0 8px;color:#1976d2;font-size:21px">  
-    Cadastrar técnico  
-  </h2>  
-
-  <p>  
-    Informe o nome e uma senha de exatamente 4 dígitos.  
-  </p>  
-
-  <form id="cadastroTecnicoForm">  
-
-    <label>Nome do técnico</label>  
-    <input  
-      id="novoTecnicoNome"  
-      autocomplete="name"  
-      required  
-      placeholder="Nome"  
-    >  
-
-    <label>Senha de 4 dígitos</label>  
-    <input  
-      id="novoTecnicoSenha"  
-      type="password"  
-      inputmode="numeric"  
-      maxlength="4"  
-      pattern="\d{4}"  
-      required  
-    >  
-
-    <label>Confirmar senha</label>  
-    <input  
-      id="novoTecnicoSenha2"  
-      type="password"  
-      inputmode="numeric"  
-      maxlength="4"  
-      pattern="\d{4}"  
-      required  
-    >  
-
-    <label>Senha de administrador para finalizar</label>  
-    <input  
-      id="senhaAdminCadastro"  
-      type="password"  
-      inputmode="numeric"  
-      maxlength="4"  
-      pattern="\d{4}"  
-      required  
-    >  
-
-    <button class="login-btn" type="submit">  
-      Finalizar cadastro  
-    </button>  
-
-    <button  
-      class="secondary"  
-      type="button"  
-      style="width:100%;margin-top:10px"  
-      onclick="mostrarLogin()"  
-    >  
-      Voltar para o login  
-    </button>  
-
-    <div class="login-error" id="cadastroErro"></div>  
-
-  </form>  
-</div>
-
-  </div>  
-</div>  <header>  
-  <div class="header-top">  
-    <h1>📦 Controle de Estoque de Toners</h1>  <button  
-  id="btnSairSistema"  
-  type="button"  
-  onclick="sairSistema()"  
->  
-  🚪 Sair  
-</button>
-
-  </div>    <p>Cadastro, entradas, saídas e histórico.</p>  
-</header>  <div class="container">    <div class="cards">  <div class="card">  
-  Tipos cadastrados  
-  <b id="totalTipos">0</b>  
-</div>  
-
-<div class="card">  
-  Total em estoque  
-  <b id="totalUnidades">0</b>  
-</div>  
-
-<div class="card">  
-  Movimentações  
-  <b id="totalMov">0</b>  
-</div>
-
-  </div>    <div class="panel">  <h2 id="formTitle">  
-  Cadastrar toner  
-</h2>  
-
-<form id="tonerForm">  
-
-  <input type="hidden" id="editId">  
-
-  <div class="grid">  
-
-    <div>  
-      <label>Código</label>  
-      <input  
-        id="codigo"  
-        required  
-        placeholder="Ex.: TN-3472"  
-      >  
-    </div>  
-
-    <div>  
-      <label>Cor</label>  
-
-      <select id="toner" required>  
-        <option value="">Selecione a cor</option>  
-        <option value="Preto">Preto</option>  
-        <option value="Ciano">Ciano</option>  
-        <option value="Magenta">Magenta</option>  
-        <option value="Amarelo">Amarelo</option>  
-        <option value="Colorido">Colorido</option>  
-      </select>  
-
-    </div>  
-
-    <div>  
-
-      <label>Impressora cadastrada</label>  
-
-      <select id="impressora" required>  
-        <option value="">Selecione a impressora</option>  
-      </select>  
-
-      <div style="margin-top:6px;display:flex;gap:6px;flex-wrap:wrap">  
-
-        <button  
-          type="button"  
-          class="secondary"  
-          style="padding:7px 10px;font-size:12px"  
-          onclick="cadastrarImpressora()"  
-        >  
-          ＋ Cadastrar impressora  
-        </button>  
-
-        <button  
-          type="button"  
-          class="danger"  
-          style="padding:7px 10px;font-size:12px"  
-          onclick="removerImpressora()"  
-        >  
-          🗑️ Remover impressora  
-        </button>  
-
-      </div>  
-
-    </div>  
-
-    <div>  
-
-      <label>Quantidade em estoque</label>  
-
-      <input  
-        id="quantidade"  
-        type="number"  
-        min="0"  
-        required  
-        value="0"  
-      >  
-
-    </div>  
-
-    <input  
-      id="localizacao"  
-      type="hidden"  
-      value="Prefeitura de Grajaú-MA"  
-    >  
-
-    <div class="full">  
-
-      <label>Observação</label>  
-
-      <textarea  
-        id="observacao"  
-        rows="2"  
-        placeholder="Informações adicionais"  
-      ></textarea>  
-
-    </div>  
-
-  </div>  
-
-  <div class="buttons">  
-
-    <button class="primary" type="submit">  
-      💾 Salvar toner  
-    </button>  
-
-    <button  
-      class="secondary"  
-      type="button"  
-      onclick="limparFormulario()"  
-    >  
-      Limpar  
-    </button>  
-
-  </div>  
-
-</form>
-
-  </div>    <div class="panel">  <h2>Estoque</h2>  
-
-<input  
-  class="search"  
-  id="busca"  
-  placeholder="🔎 Buscar por código, cor, impressora ou localização..."  
-  oninput="renderTabela()"  
->  
-
-<div class="buttons">  
-
-  <button  
-    class="success"  
-    onclick="movimentarSelecionado('entrada')"  
-  >  
-    ➕ Entrada  
-  </button>  
-
-  <button  
-    class="danger"  
-    onclick="movimentarSelecionado('saida')"  
-  >  
-    ➖ Saída  
-  </button>  
-
-  <button  
-    class="secondary"  
-    onclick="exportarCSV()"  
-  >  
-    📄 Exportar CSV  
-  </button>  
-
-  <button  
-    class="primary"  
-    onclick="imprimirEstoque()"  
-  >  
-    🖨️ Imprimir estoque  
-  </button>  
-
-  <button  
-    class="warning"  
-    onclick="backup()"  
-  >  
-    ⬇️ Fazer backup  
-  </button>  
-
-  <button  
-    class="secondary"  
-    onclick="document.getElementById('arquivoBackup').click()"  
-  >  
-    ⬆️ Restaurar backup  
-  </button>  
-
-  <input  
-    type="file"  
-    id="arquivoBackup"  
-    accept=".json"  
-    style="display:none"  
-    onchange="restaurarBackup(event)"  
-  >  
-
-</div>  
-
-<div class="table-wrap">  
-
-  <table>  
-
-    <thead>  
-      <tr>  
-        <th></th>  
-        <th>Código</th>  
-        <th>Cor</th>  
-        <th>Qtd.</th>  
-        <th>Localização</th>  
-        <th>Ações</th>  
-      </tr>  
-    </thead>  
-
-    <tbody id="tabela"></tbody>  
-
-  </table>  
-
-</div>
-
-  </div>    <div class="panel">  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">  
-
-  <h2 style="margin:0">  
-    Histórico de movimentações  
-  </h2>  
-
-  <button  
-    type="button"  
-    class="danger"  
-    style="padding:7px 12px;font-size:12px"  
-    onclick="limparHistorico()"  
-  >  
-    🗑️ Limpar  
-  </button>  
-
-</div>  
-
-<div class="table-wrap" style="margin-top:10px">  
-
-  <table>  
-
-    <thead>  
-      <tr>  
-        <th>Data</th>  
-        <th>Tipo</th>  
-        <th>Código</th>  
-        <th>Toner</th>  
-        <th>Quantidade</th>  
-        <th>Saldo</th>  
-      </tr>  
-    </thead>  
-
-    <tbody id="historico"></tbody>  
-
-  </table>  
-
-</div>
-
-  </div>    <!-- ================================================= -->    <!-- TÉCNICOS CADASTRADOS -->    <!-- ================================================= -->    <div class="panel" id="painelTecnicos">  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">  
-
-  <h2 style="margin:0">  
-    👥 Técnicos cadastrados  
-  </h2>  
-
-  <button  
-    type="button"  
-    class="secondary"  
-    onclick="carregarTecnicos()"  
-  >  
-    🔄 Atualizar  
-  </button>  
-
-</div>  
-
-<p style="color:#666;font-size:13px">  
-  Somente o administrador pode visualizar e excluir técnicos.  
-</p>  
-
-<div  
-  id="listaTecnicos"  
-  class="lista-tecnicos"  
->  
-  <div class="empty">  
-    Carregando...  
-  </div>  
-</div>
-
-  </div>  </div>  <div class="modal" id="modal">    <div class="modal-box">  <h2 id="modalTitle">  
-  Movimentação  
-</h2>  
-
-<p id="modalInfo"></p>  
-
-<label>Quantidade</label>  
-
-<input  
-  id="movQtd"  
-  type="number"  
-  min="1"  
-  value="1"  
->  
-
-<label style="margin-top:10px">  
-  Observação  
-</label>  
-
-<textarea  
-  id="movObs"  
-  rows="3"  
-  placeholder="Ex.: reposição, uso em impressora, entrega..."  
-></textarea>  
-
-<div class="buttons">  
-
-  <button  
-    class="primary"  
-    onclick="confirmarMovimentacao()"  
-  >  
-    Confirmar  
-  </button>  
-
-  <button  
-    class="secondary"  
-    onclick="fecharModal()"  
-  >  
-    Cancelar  
-  </button>  
-
-</div>
-
-  </div>  </div>  <script>  
-  
-const LOGIN_USUARIO = "admin";  
-const CHAVE = "estoque_toners_servidor";  
-  
-let tecnicos=[];  
-let usuarioLogado=null;  
-  
-let dados={  
-  toners:[],  
-  movimentacoes:[],  
-  impressoras:[]  
-};  
-  
-const loginScreen=document.getElementById("loginScreen");  
-const loginForm=document.getElementById("loginForm");  
-const loginErro=document.getElementById("loginErro");  
-  
-function liberarSistema(){  
-  document.body.classList.remove("sistema-bloqueado");  
-  loginScreen.style.display="none";  
-}  
-  
-function bloquearSistema(){  
-  document.body.classList.add("sistema-bloqueado");  
-  loginScreen.style.display="flex";  
-}  
-  
-function mostrarCadastroTecnico(){  
-  
-  document.getElementById("loginArea").style.display="none";  
-  
-  document.getElementById("cadastroTecnicoArea").style.display="block";  
-  
-  document.getElementById("cadastroErro").style.display="none";  
-  
-  document.getElementById("novoTecnicoNome").focus();  
-}  
-  
-function mostrarLogin(){  
-  
-  document.getElementById("cadastroTecnicoArea").style.display="none";  
-  
-  document.getElementById("loginArea").style.display="block";  
-  
-  document.getElementById("cadastroTecnicoForm").reset();  
-  
-  loginErro.style.display="none";  
-}  
-  
-async function api(url,options={}){  
-  
-  const r=await fetch(url,{  
-    credentials:"same-origin",  
-    ...options,  
-    headers:{  
-      "Content-Type":"application/json",  
-      ...(options.headers||{})  
-    }  
-  });  
-  
-  let data={};  
-  
-  try{  
-    data=await r.json();  
-  }catch{}  
-  
-  if(!r.ok){  
-    throw new Error(  
-      data.error || "Erro de comunicação com o servidor."  
-    );  
-  }  
-  
-  return data;  
-}  
-  
-async function carregarEstado(){  
-  
-  dados=await api("/api/state");  
-  
-  if(!Array.isArray(dados.impressoras)){  
-    dados.impressoras=[];  
-  }  
-  
-  dados.toners.forEach(x=>{  
-  
-    if(  
-      x.impressora &&  
-      !dados.impressoras.includes(x.impressora)  
-    ){  
-      dados.impressoras.push(x.impressora);  
-    }  
-  
-  });  
-  
-  renderImpressoras();  
-  renderTudo();  
-}  
-  
-function salvarDados(){  
-  
-  return api("/api/state",{  
-    method:"PUT",  
-    body:JSON.stringify(dados)  
-  }).catch(e=>{  
-  
-    alert(  
-      "Não foi possível salvar no servidor: "+  
-      e.message  
-    );  
-  
-    throw e;  
-  });  
-}  
-  
-/* =====================================================  
-   LOGIN  
-   ===================================================== */  
-  
-loginForm.addEventListener(  
-  "submit",  
-  async function(e){  
-  
-    e.preventDefault();  
-  
-    const usuario=  
-      document.getElementById("loginUsuario").value.trim();  
-  
-    const senha=  
-      document.getElementById("loginSenha").value;  
-  
-    try{  
-  
-      const resposta=await api(  
-        "/api/login",  
-        {  
-          method:"POST",  
-          body:JSON.stringify({  
-            name:usuario,  
-            password:senha,  
-            stayLogged:  
-              document.getElementById("ficarLogado").checked  
-          })  
-        }  
-      );  
-  
-      usuarioLogado=resposta.user;  
-  
-      await carregarEstado();  
-  
-      await carregarTecnicos();  
-  
-      liberarSistema();  
-  
-    }catch(err){  
-  
-      loginErro.textContent=err.message;  
-  
-      loginErro.style.display="block";  
-  
-      document.getElementById("loginSenha").value="";  
-  
-      document.getElementById("loginSenha").focus();  
-    }  
-  
-  }  
-);  
-  
-/* =====================================================  
-   CADASTRO DE TÉCNICO  
-   ===================================================== */  
-  
-document  
-  .getElementById("cadastroTecnicoForm")  
-  .addEventListener(  
-    "submit",  
-    async function(e){  
-  
-      e.preventDefault();  
-  
-      const nome=  
-        document.getElementById("novoTecnicoNome")  
-        .value.trim();  
-  
-      const senha=  
-        document.getElementById("novoTecnicoSenha")  
-        .value;  
-  
-      const senha2=  
-        document.getElementById("novoTecnicoSenha2")  
-        .value;  
-  
-      const senhaAdmin=  
-        document.getElementById("senhaAdminCadastro")  
-        .value;  
-  
-      const erro=  
-        document.getElementById("cadastroErro");  
-  
-      const mostrarErro=(msg)=>{  
-  
-        erro.textContent=msg;  
-        erro.style.display="block";  
-  
-      };  
-  
-      if(!nome){  
-        return mostrarErro(  
-          "Informe o nome do técnico."  
-        );  
-      }  
-  
-      if(nome.toLowerCase()==="admin"){  
-        return mostrarErro(  
-          "Esse nome é reservado para o administrador."  
-        );  
-      }  
-  
-      if(!/^\d{4}$/.test(senha)){  
-        return mostrarErro(  
-          "A senha deve ter exatamente 4 dígitos."  
-        );  
-      }  
-  
-      if(senha!==senha2){  
-        return mostrarErro(  
-          "As senhas não conferem."  
-        );  
-      }  
-  
-      if(!/^\d{4}$/.test(senhaAdmin)){  
-        return mostrarErro(  
-          "Informe a senha de administrador."  
-        );  
-      }  
-  
-      try{  
-  
-        await api(  
-          "/api/technicians",  
-          {  
-            method:"POST",  
-            body:JSON.stringify({  
-              name:nome,  
-              password:senha,  
-              adminPassword:senhaAdmin  
-            })  
-          }  
-        );  
-  
-        alert(  
-          "Técnico cadastrado com sucesso!"  
-        );  
-  
-        document  
-          .getElementById("cadastroTecnicoForm")  
-          .reset();  
-  
-        mostrarLogin();  
-  
-      }catch(err){  
-  
-        mostrarErro(err.message);  
-  
-      }  
-  
-    }  
-  );  
-  
-/* =====================================================  
-   INICIAR SISTEMA  
-   ===================================================== */  
-  
-async function iniciar(){  
-  
-  try{  
-  
-    const resposta=await api("/api/me");  
-  
-    usuarioLogado=resposta.user;  
-  
-    await carregarEstado();  
-  
-    await carregarTecnicos();  
-  
-    liberarSistema();  
-  
-  }catch{  
-  
-    usuarioLogado=null;  
-  
-    bloquearSistema();  
-  
-  }  
-  
-}  
-  
-/* =====================================================  
-   TÉCNICOS  
-   ===================================================== */  
-  
-async function carregarTecnicos(){  
-  
-  const painel=  
-    document.getElementById("painelTecnicos");  
-  
-  const lista=  
-    document.getElementById("listaTecnicos");  
-  
-  /*  
-    Se não estiver logado como administrador,  
-    o painel permanece escondido.  
-  */  
-  
-  if(  
-    !usuarioLogado ||  
-    usuarioLogado.id!=="admin"  
-  ){  
-  
-    painel.style.display="none";  
-  
-    return;  
-  }  
-  
-  painel.style.display="block";  
-  
-  lista.innerHTML=  
-    '<div class="empty">Carregando técnicos...</div>';  
-  
-  try{  
-  
-    const resposta=  
-      await api("/api/technicians");  
-  
-    tecnicos=  
-      resposta.technicians || [];  
-  
-    if(!tecnicos.length){  
-  
-      lista.innerHTML=  
-        '<div class="empty">Nenhum técnico cadastrado.</div>';  
-  
-      return;  
-    }  
-  
-    lista.innerHTML=  
-      tecnicos.map(t=>{  
-  
-        const nomeSeguro=  
-          String(t.name)  
-          .replace(/\\/g,"\\\\")  
-          .replace(/'/g,"\\'");  
-  
-        return `  
-          <div class="tecnico-item">  
-  
-            <div class="tecnico-info">  
-  
-              <strong>  
-                👤 ${esc(t.name)}  
-              </strong>  
-  
-              <small>  
-                Cadastrado em:  
-                ${new Date(t.created_at).toLocaleString("pt-BR")}  
-              </small>  
-  
-            </div>  
-  
-            <button  
-              type="button"  
-              class="danger"  
-              onclick="excluirTecnico('${t.id}','${nomeSeguro}')"  
-            >  
-              🗑️ Excluir  
-            </button>  
-  
-          </div>  
-        `;  
-  
-      }).join("");  
-  
-  }catch(err){  
-  
-    lista.innerHTML=  
-      `<div class="empty">  
-        Erro ao carregar técnicos:  
-        ${esc(err.message)}  
-      </div>`;  
-  
-  }  
-  
-}  
-  
-async function excluirTecnico(  
-  idTecnico,  
-  nomeTecnico  
-){  
-  
-  if(  
-    !confirm(  
-      `Tem certeza que deseja excluir o técnico "${nomeTecnico}"?\n\n`+  
-      `Ele não poderá mais entrar no sistema com essa conta.`  
-    )  
-  ){  
-    return;  
-  }  
-  
-  try{  
-  
-    await api(  
-      `/api/technicians/${idTecnico}`,  
-      {  
-        method:"DELETE"  
-      }  
-    );  
-  
-    alert(  
-      "Técnico excluído com sucesso."  
-    );  
-  
-    await carregarTecnicos();  
-  
-  }catch(err){  
-  
-    alert(  
-      "Não foi possível excluir o técnico: "+  
-      err.message  
-    );  
-  
-  }  
-  
-}  
-  
-/* =====================================================  
-   FUNÇÕES GERAIS  
-   ===================================================== */  
-  
-function id(){  
-  return Date.now().toString(36)+  
-    Math.random().toString(36).slice(2,7);  
-}  
-  
-function esc(s){  
-  
-  return String(s??"").replace(  
-    /[&<>"']/g,  
-    m=>({  
-      '&':'&amp;',  
-      '<':'&lt;',  
-      '>':'&gt;',  
-      '"':'&quot;',  
-      "'":'&#039;'  
-    }[m])  
-  );  
-  
-}  
-  
-/* =====================================================  
-   IMPRESSORAS  
-   ===================================================== */  
-  
-function renderImpressoras(){  
-  
-  const atual=impressora.value;  
-  
-  impressora.innerHTML=  
-    '<option value="">Selecione a impressora</option>'+  
-    dados.impressoras  
-      .sort((a,b)=>  
-        a.localeCompare(b,'pt-BR')  
-      )  
-      .map(nome=>  
-        `<option value="${esc(nome)}">  
-          ${esc(nome)}  
-        </option>`  
-      )  
-      .join("");  
-  
-  if(  
-    atual &&  
-    dados.impressoras.includes(atual)  
-  ){  
-    impressora.value=atual;  
-  }  
-  
-}  
-  
-function cadastrarImpressora(){  
-  
-  const nome=  
-    prompt(  
-      "Digite o nome/modelo da impressora:"  
-    );  
-  
-  if(!nome)return;  
-  
-  const n=nome.trim();  
-  
-  if(!n)return;  
-  
-  if(  
-    dados.impressoras.some(  
-      x=>x.toLowerCase()===n.toLowerCase()  
-    )  
-  ){  
-  
-    alert(  
-      "Essa impressora já está cadastrada."  
-    );  
-  
-    impressora.value=  
-      dados.impressoras.find(  
-        x=>x.toLowerCase()===n.toLowerCase()  
-      );  
-  
-    return;  
-  }  
-  
-  dados.impressoras.push(n);  
-  
-  salvarDados();  
-  
-  renderImpressoras();  
-  
-  impressora.value=n;  
-}  
-  
-function removerImpressora(){  
-  
-  const select=  
-    document.getElementById("impressora");  
-  
-  const nome=select.value;  
-  
-  if(!nome){  
-  
-    alert(  
-      "Selecione a impressora que deseja remover."  
-    );  
-  
-    return;  
-  }  
-  
-  if(  
-    !confirm(  
-      "Remover a impressora "+nome+  
-      " da lista de impressoras cadastradas?\n\n"+  
-      "Os toners já cadastrados para ela não serão apagados."  
-    )  
-  ){  
-    return;  
-  }  
-  
-  dados.impressoras=  
-    dados.impressoras.filter(  
-      x=>x.toLowerCase()!==nome.toLowerCase()  
-    );  
-  
-  salvarDados();  
-  
-  renderImpressoras();  
-  
-  select.value="";  
-}  
-  
-/* =====================================================  
-   CADASTRO / EDIÇÃO DE TONER  
-   ===================================================== */  
-  
-document  
-  .getElementById("tonerForm")  
-  .addEventListener(  
-    "submit",  
-    e=>{  
-  
-      e.preventDefault();  
-  
-      const edit=  
-        document.getElementById("editId").value;  
-  
-      const obj={  
-  
-        codigo:codigo.value.trim(),  
-  
-        toner:toner.value.trim(),  
-  
-        impressora:impressora.value.trim(),  
-  
-        quantidade:Number(  
-          quantidade.value  
-        ),  
-  
-        localizacao:  
-          "Prefeitura de Grajaú-MA",  
-  
-        observacao:  
-          observacao.value.trim()  
-  
-      };  
-  
-      if(  
-        !dados.impressoras.includes(  
-          obj.impressora  
-        )  
-      ){  
-  
-        dados.impressoras.push(  
-          obj.impressora  
-        );  
-  
-      }  
-  
-      if(edit){  
-  
-        const i=  
-          dados.toners.findIndex(  
-            x=>x.id===edit  
-          );  
-  
-        if(i>=0){  
-  
-          dados.toners[i]={  
-            ...dados.toners[i],  
-            ...obj  
-          };  
-  
-        }  
-  
-      }else{  
-  
-        if(  
-          dados.toners.some(  
-            x=>  
-              x.codigo.toLowerCase()===  
-              obj.codigo.toLowerCase()  
-          )  
-        ){  
-  
-          alert(  
-            "Já existe um toner com este código."  
-          );  
-  
-          return;  
-        }  
-  
-        obj.id=id();  
-  
-        dados.toners.push(obj);  
-  
-        if(obj.quantidade>0){  
-  
-          dados.movimentacoes.push({  
-  
-            id:id(),  
-  
-            data:  
-              new Date().toISOString(),  
-  
-            tipo:"Entrada inicial",  
-  
-            tonerId:obj.id,  
-  
-            codigo:obj.codigo,  
-  
-            toner:obj.toner,  
-  
-            quantidade:  
-              obj.quantidade,  
-  
-            saldo:  
-              obj.quantidade,  
-  
-            observacao:  
-              "Cadastro inicial"  
-  
-          });  
-  
-        }  
-  
-      }  
-  
-      salvarDados();  
-  
-      limparFormulario();  
-  
-      renderTudo();  
-  
-    }  
-  );  
-  
-function limparFormulario(){  
-  
-  document  
-    .getElementById("tonerForm")  
-    .reset();  
-  
-  editId.value="";  
-  
-  quantidade.value=0;  
-  
-  document  
-    .getElementById("formTitle")  
-    .textContent="Cadastrar toner";  
-  
-}  
-  
-function renderTudo(){  
-  
-  renderTabela();  
-  
-  renderHistorico();  
-  
-  atualizarCards();  
-  
-}  
-  
-function atualizarCards(){  
-  
-  totalTipos.textContent=  
-    dados.toners.length;  
-  
-  totalUnidades.textContent=  
-    dados.toners.reduce(  
-      (s,x)=>s+Number(x.quantidade),  
-      0  
-    );  
-  
-  totalMov.textContent=  
-    dados.movimentacoes.length;  
-  
-}  
-  
-/* =====================================================  
-   TABELA DE ESTOQUE  
-   ===================================================== */  
-  
-function renderTabela(){  
-  
-  const q=  
-    busca.value.toLowerCase();  
-  
-  const lista=  
-    dados.toners.filter(  
-      x=>  
-        [  
-          x.codigo,  
-          x.toner,  
-          x.impressora,  
-          x.localizacao  
-        ]  
-        .join(" ")  
-        .toLowerCase()  
-        .includes(q)  
-    );  
-  
-  const grupos={};  
-  
-  lista.forEach(x=>{  
-  
-    const chave=  
-      x.impressora ||  
-      "Sem impressora";  
-  
-    if(!grupos[chave]){  
-      grupos[chave]=[];  
-    }  
-  
-    grupos[chave].push(x);  
-  
-  });  
-  
-  const nomes=  
-    Object.keys(grupos);  
-  
-  if(!nomes.length){  
-  
-    tabela.innerHTML=  
-      `<tr>  
-        <td colspan="8" class="empty">  
-          Nenhum toner cadastrado.  
-        </td>  
-      </tr>`;  
-  
-    return;  
-  }  
-  
-  tabela.innerHTML=  
-    nomes.map(nome=>{  
-  
-      const itens=  
-        grupos[nome];  
-  
-      return `  
-  
-        <tr class="printer-group">  
-  
-          <td  
-            colspan="8"  
-            style="background:#eaf2f8;font-weight:bold;font-size:15px;padding:12px"  
-          >  
-            🖨️ ${esc(nome)}  
-          </td>  
-  
-        </tr>  
-  
-        ${itens.map(x=>`  
-  
-          <tr  
-            onclick="if(!event.target.closest('button') && !event.target.closest('input')){selecionarLinha(this)}"  
-          >  
-  
-            <td>  
-  
-              <input  
-                type="radio"  
-                name="sel"  
-                onchange="selecionadoId='${x.id}'"  
-              >  
-  
-            </td>  
-  
-            <td>  
-              ${esc(x.codigo)}  
-            </td>  
-  
-            <td>  
-              ${esc(x.toner)}  
-            </td>  
-  
-            <td>  
-              ${x.quantidade}  
-            </td>  
-  
-            <td>  
-              ${esc(x.localizacao)}  
-            </td>  
-  
-            <td>  
-              ${esc(x.observacao)}  
-            </td>  
-  
-            <td class="actions">  
-  
-              <button  
-                class="primary"  
-                onclick="editar('${x.id}')"  
-              >  
-                Editar  
-              </button>  
-  
-              <button  
-                class="danger"  
-                onclick="excluir('${x.id}')"  
-              >  
-                Excluir  
-              </button>  
-  
-            </td>  
-  
-          </tr>  
-  
-        `).join("")}  
-  
-      `;  
-  
-    }).join("");  
-  
-}  
-  
-function selecionarLinha(el){  
-  
-  if(  
-    !el.classList.contains(  
-      "printer-group"  
-    )  
-  ){  
-  
-    const radio=  
-      el.querySelector(  
-        'input[type="radio"]'  
-      );  
-  
-    if(radio){  
-  
-      radio.checked=true;  
-  
-      selecionadoId=  
-        radio  
-          .getAttribute("onchange")  
-          .match(/'([^']+)'/)[1];  
-  
-    }  
-  
-  }  
-  
-}  
-  
-function editar(idv){  
-  
-  const x=  
-    dados.toners.find(  
-      x=>x.id===idv  
-    );  
-  
-  if(!x)return;  
-  
-  editId.value=x.id;  
-  
-  codigo.value=x.codigo;  
-  
-  toner.value=x.toner;  
-  
-  renderImpressoras();  
-  
-  impressora.value=x.impressora;  
-  
-  quantidade.value=  
-    x.quantidade;  
-  
-  localizacao.value=  
-    "Prefeitura de Grajaú-MA";  
-  
-  observacao.value=  
-    x.observacao;  
-  
-  formTitle.textContent=  
-    "Editar toner";  
-  
-  window.scrollTo({  
-    top:0,  
-    behavior:"smooth"  
-  });  
-  
-}  
-  
-function excluir(idv){  
-  
-  const x=  
-    dados.toners.find(  
-      x=>x.id===idv  
-    );  
-  
-  if(!x)return;  
-  
-  if(  
-    confirm(  
-      `Excluir o toner ${x.codigo}? O histórico também será mantido.`  
-    )  
-  ){  
-  
-    dados.toners=  
-      dados.toners.filter(  
-        x=>x.id!==idv  
-      );  
-  
-    salvarDados();  
-  
-    renderTudo();  
-  
-  }  
-  
-}  
-  
-/* =====================================================  
-   MOVIMENTAÇÕES  
-   ===================================================== */  
-  
-function movimentarSelecionado(tipo){  
-  
-  if(!selecionadoId){  
-  
-    alert(  
-      "Selecione um toner na tabela primeiro."  
-    );  
-  
-    return;  
-  }  
-  
-  const x=  
-    dados.toners.find(  
-      x=>x.id===selecionadoId  
-    );  
-  
-  if(!x)return;  
-  
-  tipoMov=tipo;  
-  
-  modal.classList.add("show");  
-  
-  modalTitle.textContent=  
-    tipo==="entrada"  
-      ? "➕ Registrar entrada"  
-      : "➖ Registrar saída";  
-  
-  modalInfo.textContent=  
-    `${x.codigo} — ${x.toner} | Estoque atual: ${x.quantidade}`;  
-  
-  movQtd.value=1;  
-  
-  movObs.value="";  
-  
-}  
-  
-function fecharModal(){  
-  
-  modal.classList.remove("show");  
-  
-}  
-  
-function confirmarMovimentacao(){  
-  
-  const x=  
-    dados.toners.find(  
-      x=>x.id===selecionadoId  
-    );  
-  
-  const qtd=  
-    Number(movQtd.value);  
-  
-  if(!x || qtd<1){  
-  
-    alert(  
-      "Informe uma quantidade válida."  
-    );  
-  
-    return;  
-  }  
-  
-  if(  
-    tipoMov==="saida" &&  
-    qtd>x.quantidade  
-  ){  
-  
-    alert(  
-      "A saída não pode ser maior que o estoque atual."  
-    );  
-  
-    return;  
-  }  
-  
-  x.quantidade +=  
-    tipoMov==="entrada"  
-      ? qtd  
-      : -qtd;  
-  
-  dados.movimentacoes.unshift({  
-  
-    id:id(),  
-  
-    data:  
-      new Date().toISOString(),  
-  
-    tipo:  
-      tipoMov==="entrada"  
-        ? "Entrada"  
-        : "Saída",  
-  
-    tonerId:x.id,  
-  
-    codigo:x.codigo,  
-  
-    toner:x.toner,  
-  
-    quantidade:qtd,  
-  
-    saldo:x.quantidade,  
-  
-    observacao:  
-      movObs.value.trim()  
-  
-  });  
-  
-  dados.movimentacoes=  
-    dados.movimentacoes.slice(0,5);  
-  
-  salvarDados();  
-  
-  fecharModal();  
-  
-  renderTudo();  
-  
-}  
-  
-function limparHistorico(){  
-  
-  if(!dados.movimentacoes.length){  
-  
-    alert(  
-      "O histórico já está vazio."  
-    );  
-  
-    return;  
-  }  
-  
-  if(  
-    confirm(  
-      "Tem certeza que deseja limpar o histórico de movimentações?"  
-    )  
-  ){  
-  
-    dados.movimentacoes=[];  
-  
-    salvarDados();  
-  
-    renderTudo();  
-  
-  }  
-  
-}  
-  
-function renderHistorico(){  
-  
-  historico.innerHTML=  
-    dados.movimentacoes.length  
-  
-      ? dados.movimentacoes  
-          .slice(0,5)  
-          .map(m=>`  
-  
-            <tr>  
-  
-              <td>  
-                ${new Date(m.data).toLocaleString("pt-BR")}  
-              </td>  
-  
-              <td>  
-                ${m.tipo}  
-              </td>  
-  
-              <td>  
-                ${esc(m.codigo)}  
-              </td>  
-  
-              <td>  
-                ${esc(m.toner)}  
-              </td>  
-  
-              <td>  
-                ${m.quantidade}  
-              </td>  
-  
-              <td>  
-                ${m.saldo}  
-              </td>  
-  
-            </tr>  
-  
-          `)  
-          .join("")  
-  
-      : `  
-        <tr>  
-          <td colspan="6" class="empty">  
-            Nenhuma movimentação registrada.  
-          </td>  
-        </tr>  
-      `;  
-  
-}  
-  
-/* =====================================================  
-   IMPRESSÃO  
-   ===================================================== */  
-  
-function imprimirEstoque(){  
-  
-  const q=  
-    busca.value.toLowerCase();  
-  
-  const lista=  
-    dados.toners.filter(  
-      x=>  
-        [  
-          x.codigo,  
-          x.toner,  
-          x.impressora,  
-          x.localizacao  
-        ]  
-        .join(" ")  
-        .toLowerCase()  
-        .includes(q)  
-    );  
-  
-  const grupos={};  
-  
-  lista.forEach(x=>{  
-  
-    const nome=  
-      x.impressora ||  
-      "Impressora não informada";  
-  
-    if(!grupos[nome]){  
-      grupos[nome]=[];  
-    }  
-  
-    grupos[nome].push(x);  
-  
-  });  
-  
-  const ordemCores={  
-    "Preto":1,  
-    "Ciano":2,  
-    "Magenta":3,  
-    "Amarelo":4,  
-    "Colorido":5  
-  };  
-  
-  const nomes=  
-    Object.keys(grupos)  
-      .sort(  
-        (a,b)=>  
-          a.localeCompare(  
-            b,  
-            "pt-BR"  
-          )  
-      );  
-  
-  const blocos=  
-    nomes.map(nome=>{  
-  
-      const itens=  
-        grupos[nome].sort(  
-          (a,b)=>{  
-  
-            const ca=  
-              ordemCores[a.toner]||99;  
-  
-            const cb=  
-              ordemCores[b.toner]||99;  
-  
-            return ca-cb ||  
-              a.toner.localeCompare(  
-                b.toner,  
-                "pt-BR"  
-              );  
-  
-          }  
-        );  
-  
-      return `  
-  
-        <section class="impressora">  
-  
-          <h3>  
-            🖨️ ${esc(nome)}  
-          </h3>  
-  
-          <table>  
-  
-            <thead>  
-  
-              <tr>  
-                <th>Código</th>  
-                <th>Cor</th>  
-                <th>Quantidade</th>  
-                <th>Observação</th>  
-              </tr>  
-  
-            </thead>  
-  
-            <tbody>  
-  
-              ${itens.map(x=>{  
-  
-                const baixo=  
-                  Number(x.quantidade)<=3;  
-  
-                return `  
-                  <tr class="${baixo?'estoque-baixo':''}">  
-  
-                    <td>  
-                      ${esc(x.codigo)}  
-                    </td>  
-  
-                    <td>  
-                      ${esc(x.toner)}  
-                    </td>  
-  
-                    <td>  
-                      ${x.quantidade}  
-                    </td>  
-  
-                    <td>  
-                      ${esc(x.observacao)}  
-                    </td>  
-  
-                  </tr>  
-                `;  
-  
-              }).join("")}  
-  
-            </tbody>  
-  
-          </table>  
-  
-        </section>  
-  
-      `;  
-  
-    }).join("");  
-  
-  const pedidos=  
-    lista  
-      .filter(  
-        x=>Number(x.quantidade)<=3  
-      )  
-      .sort(  
-        (a,b)=>{  
-  
-          const pa=  
-            (a.impressora||"")  
-            .localeCompare(  
-              b.impressora||"",  
-              "pt-BR"  
-            );  
-  
-          if(pa!==0)return pa;  
-  
-          const ca=  
-            ordemCores[a.toner]||99;  
-  
-          const cb=  
-            ordemCores[b.toner]||99;  
-  
-          return ca-cb ||  
-            a.toner.localeCompare(  
-              b.toner,  
-              "pt-BR"  
-            );  
-  
-        }  
-      );  
-  
-  const gruposPedidos={};  
-  
-  pedidos.forEach(x=>{  
-  
-    const nome=  
-      x.impressora ||  
-      "Impressora não informada";  
-  
-    if(!gruposPedidos[nome]){  
-      gruposPedidos[nome]=[];  
-    }  
-  
-    gruposPedidos[nome].push(x);  
-  
-  });  
-  
-  const pedidosHtml=  
-    Object.keys(gruposPedidos)  
-      .sort(  
-        (a,b)=>  
-          a.localeCompare(  
-            b,  
-            "pt-BR"  
-          )  
-      )  
-      .map(nome=>`  
-  
-        <div class="pedido-impressora">  
-  
-          <strong>  
-            🖨️ ${esc(nome)}  
-          </strong>  
-  
-          <ul>  
-  
-            ${gruposPedidos[nome]  
-              .map(x=>  
-                `<li>  
-                  ${esc(x.toner)}  
-                  — Código: ${esc(x.codigo)}  
-                </li>`  
-              )  
-              .join("")}  
-  
-          </ul>  
-  
-        </div>  
-  
-      `)  
-      .join("");  
-  
-  const janela=  
-    window.open(  
-      "",  
-      "_blank",  
-      "width=1000,height=700"  
-    );  
-  
-  janela.document.write(`  
-  
-<!DOCTYPE html>  
-  
-<html lang="pt-BR">  
-  
-<head>  
-  
-<meta charset="UTF-8">  
-  
-<title>  
-Estoque de Toners - Prefeitura de Grajaú-MA  
-</title>  
-  
-<style>  
-  
-body{  
-  font-family:Arial,sans-serif;  
-  margin:25px;  
-  color:#222  
-}  
-  
-h1{  
-  text-align:center;  
-  margin:0 0 4px;  
-  font-size:22px  
-}  
-  
-h2{  
-  text-align:center;  
-  font-size:15px;  
-  font-weight:normal;  
-  margin:0 0 20px  
-}  
-  
-.resumo{  
-  display:flex;  
-  justify-content:space-between;  
-  border-bottom:1px solid #aaa;  
-  padding-bottom:12px;  
-  margin-bottom:20px;  
-  font-size:13px  
-}  
-  
-.impressora{  
-  margin-bottom:24px;  
-  page-break-inside:avoid  
-}  
-  
-.impressora h3{  
-  margin:0 0 8px;  
-  padding:9px 10px;  
-  background:#e9eef2;  
-  border:1px solid #aaa;  
-  font-size:16px  
-}  
-  
-table{  
-  width:100%;  
-  border-collapse:collapse;  
-  font-size:12px  
-}  
-  
-th,td{  
-  border:1px solid #999;  
-  padding:7px;  
-  text-align:left  
-}  
-  
-th{  
-  background:#f0f0f0  
-}  
-  
-.estoque-baixo td{  
-  color:#c62828;  
-  font-weight:bold  
-}  
-  
-.pedidos{  
-  margin-top:30px;  
-  border-top:3px solid #222;  
-  padding-top:15px;  
-  page-break-inside:avoid  
-}  
-  
-.pedidos h2{  
-  text-align:left;  
-  font-size:18px;  
-  font-weight:bold;  
-  margin:0 0 12px  
-}  
-  
-.pedido-impressora{  
-  margin:0 0 12px;  
-  padding:9px 10px;  
-  border:1px solid #ccc  
-}  
-  
-.pedido-impressora strong{  
-  font-size:14px  
-}  
-  
-.pedido-impressora ul{  
-  margin:7px 0 0 20px;  
-  padding:0  
-}  
-  
-.pedido-impressora li{  
-  margin:4px 0  
-}  
-  
-.vazio{  
-  font-size:13px;  
-  color:#555  
-}  
-  
-.footer{  
-  margin-top:25px;  
-  font-size:11px;  
-  text-align:center  
-}  
-  
-@media print{  
-  
-  body{  
-    margin:12mm  
-  }  
-  
-  .impressora,  
-  .pedidos{  
-    break-inside:avoid  
-  }  
-  
-}  
-  
-</style>  </head>  <body>  <h1>  
-CONTROLE DE ESTOQUE DE TONERS  
-</h1>  <h2>  
-Prefeitura de Grajaú-MA  
-</h2>  <div class="resumo">    <span>  
-    Data:  
-    ${new Date().toLocaleString("pt-BR")}  
-  </span>    <span>  
-    Impressoras:  
-    ${nomes.length}  
-  </span>    <span>  
-    Total de unidades:  
-    ${lista.reduce(  
-      (a,x)=>a+Number(x.quantidade),  
-      0  
-    )}  
-  </span>  </div>  ${blocos ||
-'<p style="text-align:center">Nenhum toner encontrado.</p>'
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle de Estoque de Toners</title>
+
+<style>
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:Arial,sans-serif;
+  background:#f3f5f7;
+  color:#222;
 }
 
-<section class="pedidos">    <h2>  
-    📋 PEDIDOS DE NOVOS TONERS  
-  </h2>  ${
-pedidosHtml ||
-'<div class="vazio">Nenhum toner precisa ser solicitado no momento.</div>'
+header{
+  background:#263238;
+  color:#fff;
+  padding:20px;
 }
 
-</section>  <div class="footer">  
-  Relatório de estoque — Prefeitura de Grajaú-MA  
-</div>  </body>  </html>  `);
+.header-top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  max-width:1200px;
+  margin:0 auto;
+}
 
-janela.document.close();
+header h1{
+  margin:0;
+  font-size:24px;
+}
 
-janela.onload=function(){
-janela.print();
-};
+header p{
+  max-width:1200px;
+  margin:7px auto 0;
+  color:#cfd8dc;
+}
+
+#btnSairSistema{
+  background:#c62828;
+  color:#fff;
+  border:0;
+  border-radius:9px;
+  padding:10px 16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.container{
+  max-width:1200px;
+  margin:20px auto;
+  padding:0 15px;
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin-bottom:18px;
+}
+
+.card{
+  background:#fff;
+  border-radius:10px;
+  padding:16px;
+  box-shadow:0 2px 7px #0001;
+}
+
+.card b{
+  display:block;
+  font-size:25px;
+  margin-top:5px;
+}
+
+.panel{
+  background:#fff;
+  border-radius:10px;
+  padding:18px;
+  margin-bottom:18px;
+  box-shadow:0 2px 7px #0001;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+}
+
+.full{
+  grid-column:1/-1;
+}
+
+label{
+  font-size:13px;
+  font-weight:bold;
+  display:block;
+  margin-bottom:5px;
+}
+
+input,
+select,
+textarea{
+  width:100%;
+  padding:10px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:14px;
+}
+
+textarea{
+  resize:vertical;
+}
+
+.buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:14px;
+}
+
+button{
+  border:0;
+  border-radius:6px;
+  padding:10px 14px;
+  cursor:pointer;
+  font-weight:bold;
+}
+
+.primary{
+  background:#1976d2;
+  color:#fff;
+}
+
+.success{
+  background:#2e7d32;
+  color:#fff;
+}
+
+.warning{
+  background:#f9a825;
+  color:#111;
+}
+
+.danger{
+  background:#d32f2f;
+  color:#fff;
+}
+
+.secondary{
+  background:#607d8b;
+  color:#fff;
+}
+
+.search{
+  margin-bottom:12px;
+}
+
+.table-wrap{
+  overflow:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:850px;
+}
+
+th,
+td{
+  padding:10px;
+  border-bottom:1px solid #eee;
+  text-align:left;
+  font-size:13px;
+}
+
+th{
+  background:#eceff1;
+}
+
+.low{
+  color:#d32f2f;
+  font-weight:bold;
+}
+
+.ok{
+  color:#2e7d32;
+  font-weight:bold;
+}
+
+.actions button{
+  padding:6px 8px;
+  margin:2px;
+  font-size:12px;
+}
+
+.empty{
+  text-align:center;
+  color:#777;
+  padding:25px;
+}
+
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:#0008;
+  align-items:center;
+  justify-content:center;
+  padding:15px;
+  z-index:5000;
+}
+
+.modal.show{
+  display:flex;
+}
+
+.modal-box{
+  background:#fff;
+  border-radius:10px;
+  padding:20px;
+  width:min(600px,100%);
+  max-height:90vh;
+  overflow:auto;
+}
+
+.history{
+  max-height:300px;
+  overflow:auto;
+}
+
+
+/* LOGIN */
+
+.login-screen{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#1976d2,#0d47a1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999;
+}
+
+.login-box{
+  width:100%;
+  max-width:380px;
+  background:#fff;
+  border-radius:16px;
+  padding:30px;
+  box-shadow:0 12px 40px rgba(0,0,0,.25);
+}
+
+.login-box h1{
+  text-align:center;
+  margin:0 0 8px;
+  color:#1976d2;
+  font-size:25px;
+}
+
+.login-box p{
+  text-align:center;
+  color:#666;
+  margin:0 0 24px;
+}
+
+.login-box label{
+  display:block;
+  font-weight:600;
+  margin:12px 0 6px;
+}
+
+.login-box input{
+  width:100%;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:16px;
+}
+
+.login-btn{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  border:0;
+  border-radius:8px;
+  background:#1976d2;
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer;
+}
+
+.login-error{
+  display:none;
+  color:#c62828;
+  text-align:center;
+  margin-top:12px;
+  font-size:14px;
+}
+
+body.sistema-bloqueado>header,
+body.sistema-bloqueado>.container,
+body.sistema-bloqueado>.modal{
+  display:none;
+}
+
+
+/* TÉCNICOS */
+
+#painelTecnicos{
+  display:none;
+}
+
+.lista-tecnicos{
+  display:grid;
+  gap:10px;
+}
+
+.tecnico-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  background:#f8f9fa;
+}
+
+.tecnico-info strong{
+  display:block;
+  font-size:15px;
+}
+
+.tecnico-info small{
+  color:#666;
+  font-size:12px;
+}
+
+
+@media(max-width:800px){
+
+  .cards{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .grid{
+    grid-template-columns:1fr 1fr;
+  }
 
 }
+
+
+@media(max-width:700px){
+
+  header{
+    padding:16px;
+  }
+
+  .header-top{
+    align-items:center;
+  }
+
+  header h1{
+    font-size:20px;
+  }
+
+  #btnSairSistema{
+    padding:9px 12px;
+    font-size:13px;
+  }
+
+  .container{
+    margin:10px auto;
+    padding:0 10px;
+  }
+
+  .panel{
+    padding:14px;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .full{
+    grid-column:auto;
+  }
+
+  .buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:7px;
+  }
+
+  .buttons button{
+    width:100%;
+    min-height:42px;
+  }
+
+  .table-wrap{
+    overflow-x:auto;
+  }
+
+  table{
+    min-width:720px;
+  }
+
+
+  /* GRUPO DA IMPRESSORA NO CELULAR */
+
+  #tabela tr.printer-group{
+    display:block;
+    border:0;
+    margin:12px 0 5px;
+    padding:0;
+    background:transparent;
+  }
+
+  #tabela tr.printer-group td{
+    display:block;
+    width:100%;
+    border-radius:8px;
+    background:#eaf2f8;
+    font-size:15px;
+  }
+
+
+  /* TONER NO CELULAR */
+
+  #tabela tr:not(.printer-group){
+    display:grid;
+    grid-template-columns:38px 1fr 1fr;
+    gap:2px;
+    border:1px solid #ddd;
+    border-radius:8px;
+    margin-bottom:8px;
+    padding:8px;
+    background:#fff;
+    cursor:pointer;
+  }
+
+  #tabela tr:not(.printer-group) td{
+    border:0;
+    padding:5px;
+    display:block;
+    min-width:0;
+    overflow-wrap:anywhere;
+  }
+
+  #tabela tr:not(.printer-group) td:first-child{
+    grid-row:1 / span 3;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+
+  #tabela tr:not(.printer-group) td:nth-child(2)::before{
+    content:"Código: ";
+    font-weight:bold;
+  }
+
+  #tabela tr:not(.printer-group) td:nth-child(3)::before{
+    content:"Cor: ";
+    font-weight:bold;
+  }
+
+  #tabela tr:not(.printer-group) td:nth-child(4)::before{
+    content:"Qtd.: ";
+    font-weight:bold;
+  }
+
+  #tabela tr:not(.printer-group) td:nth-child(5){
+    grid-column:2/-1;
+  }
+
+  #tabela tr:not(.printer-group) td:nth-child(5)::before{
+    content:"Local: ";
+    font-weight:bold;
+  }
+
+  #tabela tr:not(.printer-group) td:nth-child(6){
+    grid-column:2/-1;
+  }
+
+  #tabela tr:not(.printer-group) td:nth-child(6)::before{
+    content:"Obs.: ";
+    font-weight:bold;
+  }
+
+  #tabela tr:not(.printer-group) td:last-child{
+    grid-column:2/-1;
+  }
+
+  #tabela .actions{
+    display:flex;
+    gap:5px;
+  }
+
+  #tabela .actions button{
+    width:auto;
+    min-height:38px;
+  }
+
+  #tabela input[type="radio"]{
+    width:22px;
+    height:22px;
+  }
+
+}
+
+
+@media(max-width:520px){
+
+  .cards{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .tecnico-item{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .tecnico-item button{
+    width:100%;
+  }
+
+}
+
+</style>
+</head>
+
+<body class="sistema-bloqueado">
+
+
+<!-- =====================================================
+     LOGIN
+     ===================================================== -->
+
+<div class="login-screen" id="loginScreen">
+
+  <div class="login-box">
+
+    <h1>
+      📦 Controle de Estoque
+    </h1>
+
+    <p>
+      Prefeitura de Grajaú-MA
+    </p>
+
+
+    <div id="loginArea">
+
+      <form id="loginForm">
+
+        <label>
+          Nome do técnico / usuário
+        </label>
+
+        <input
+          id="loginUsuario"
+          autocomplete="username"
+          required
+          placeholder="Digite o nome"
+        >
+
+
+        <label>
+          Senha de 4 dígitos
+        </label>
+
+        <input
+          id="loginSenha"
+          type="password"
+          inputmode="numeric"
+          maxlength="4"
+          pattern="\d{4}"
+          autocomplete="current-password"
+          required
+          placeholder="Digite a senha"
+        >
+
+
+        <label
+          style="
+            display:flex;
+            align-items:center;
+            gap:8px;
+            font-weight:500;
+            margin-top:12px;
+          "
+        >
+
+          <input
+            id="ficarLogado"
+            type="checkbox"
+            style="width:18px;height:18px"
+          >
+
+          Permanecer logado neste aparelho
+
+        </label>
+
+
+        <button
+          class="login-btn"
+          type="submit"
+        >
+          🔐 Entrar
+        </button>
+
+
+        <button
+          class="secondary"
+          type="button"
+          style="width:100%;margin-top:10px"
+          onclick="mostrarCadastroTecnico()"
+        >
+          👤 Cadastrar técnico
+        </button>
+
+
+        <div
+          class="login-error"
+          id="loginErro"
+        >
+          Nome ou senha incorretos.
+        </div>
+
+      </form>
+
+    </div>
+
+
+    <!-- CADASTRO DE TÉCNICO -->
+
+    <div
+      id="cadastroTecnicoArea"
+      style="display:none"
+    >
+
+      <h2
+        style="
+          text-align:center;
+          margin:0 0 8px;
+          color:#1976d2;
+          font-size:21px;
+        "
+      >
+        Cadastrar técnico
+      </h2>
+
+      <p>
+        Informe o nome e uma senha de exatamente 4 dígitos.
+      </p>
+
+
+      <form id="cadastroTecnicoForm">
+
+        <label>
+          Nome do técnico
+        </label>
+
+        <input
+          id="novoTecnicoNome"
+          autocomplete="name"
+          required
+          placeholder="Nome"
+        >
+
+
+        <label>
+          Senha de 4 dígitos
+        </label>
+
+        <input
+          id="novoTecnicoSenha"
+          type="password"
+          inputmode="numeric"
+          maxlength="4"
+          pattern="\d{4}"
+          required
+        >
+
+
+        <label>
+          Confirmar senha
+        </label>
+
+        <input
+          id="novoTecnicoSenha2"
+          type="password"
+          inputmode="numeric"
+          maxlength="4"
+          pattern="\d{4}"
+          required
+        >
+
+
+        <label>
+          Senha de administrador para finalizar
+        </label>
+
+        <input
+          id="senhaAdminCadastro"
+          type="password"
+          inputmode="numeric"
+          maxlength="4"
+          pattern="\d{4}"
+          required
+        >
+
+
+        <button
+          class="login-btn"
+          type="submit"
+        >
+          Finalizar cadastro
+        </button>
+
+
+        <button
+          class="secondary"
+          type="button"
+          style="width:100%;margin-top:10px"
+          onclick="mostrarLogin()"
+        >
+          Voltar para o login
+        </button>
+
+
+        <div
+          class="login-error"
+          id="cadastroErro"
+        ></div>
+
+      </form>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =====================================================
+     CABEÇALHO
+     ===================================================== -->
+
+<header>
+
+  <div class="header-top">
+
+    <h1>
+      📦 Controle de Estoque de Toners
+    </h1>
+
+    <button
+      id="btnSairSistema"
+      type="button"
+      onclick="sairSistema()"
+    >
+      🚪 Sair
+    </button>
+
+  </div>
+
+  <p>
+    Cadastro, entradas, saídas e histórico.
+  </p>
+
+</header>
+
+
+<div class="container">
+
+
+  <!-- CARDS -->
+
+  <div class="cards">
+
+    <div class="card">
+
+      Tipos cadastrados
+
+      <b id="totalTipos">
+        0
+      </b>
+
+    </div>
+
+
+    <div class="card">
+
+      Total em estoque
+
+      <b id="totalUnidades">
+        0
+      </b>
+
+    </div>
+
+
+    <div class="card">
+
+      Movimentações
+
+      <b id="totalMov">
+        0
+      </b>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       CADASTRO DE TONER
+       ===================================================== -->
+
+  <div class="panel">
+
+    <h2 id="formTitle">
+      Cadastrar toner
+    </h2>
+
+
+    <form id="tonerForm">
+
+      <input
+        type="hidden"
+        id="editId"
+      >
+
+
+      <div class="grid">
+
+
+        <div>
+
+          <label>
+            Código
+          </label>
+
+          <input
+            id="codigo"
+            required
+            placeholder="Ex.: TN-3472"
+          >
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Cor
+          </label>
+
+          <select
+            id="toner"
+            required
+          >
+
+            <option value="">
+              Selecione a cor
+            </option>
+
+            <option value="Preto">
+              Preto
+            </option>
+
+            <option value="Ciano">
+              Ciano
+            </option>
+
+            <option value="Magenta">
+              Magenta
+            </option>
+
+            <option value="Amarelo">
+              Amarelo
+            </option>
+
+            <option value="Colorido">
+              Colorido
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Impressora
+          </label>
+
+          <select
+            id="impressora"
+            required
+          >
+
+            <option value="">
+              Selecione a impressora
+            </option>
+
+          </select>
+
+
+          <div
+            style="
+              margin-top:6px;
+              display:flex;
+              gap:6px;
+              flex-wrap:wrap;
+            "
+          >
+
+            <button
+              type="button"
+              class="secondary"
+              style="
+                padding:7px 10px;
+                font-size:12px;
+              "
+              onclick="cadastrarImpressora()"
+            >
+              ＋ Cadastrar impressora
+            </button>
+
+
+            <button
+              type="button"
+              class="danger"
+              style="
+                padding:7px 10px;
+                font-size:12px;
+              "
+              onclick="removerImpressora()"
+            >
+              🗑️ Remover impressora
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <div>
+
+          <label>
+            Quantidade em estoque
+          </label>
+
+          <input
+            id="quantidade"
+            type="number"
+            min="0"
+            required
+            value="0"
+          >
+
+        </div>
+
+
+        <input
+          id="localizacao"
+          type="hidden"
+          value="Prefeitura de Grajaú-MA"
+        >
+
+
+        <div class="full">
+
+          <label>
+            Observação
+          </label>
+
+          <textarea
+            id="observacao"
+            rows="2"
+            placeholder="Informações adicionais"
+          ></textarea>
+
+        </div>
+
+
+      </div>
+
+
+      <div class="buttons">
+
+        <button
+          class="primary"
+          type="submit"
+        >
+          💾 Salvar toner
+        </button>
+
+
+        <button
+          class="secondary"
+          type="button"
+          onclick="limparFormulario()"
+        >
+          Limpar
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+
+  <!-- =====================================================
+       ESTOQUE
+       ===================================================== -->
+
+  <div class="panel">
+
+    <h2>
+      Estoque
+    </h2>
+
+
+    <input
+      class="search"
+      id="busca"
+      placeholder="🔎 Buscar por código, cor, impressora ou localização..."
+      oninput="renderTabela()"
+    >
+
+
+    <div class="buttons">
+
+      <button
+        class="success"
+        onclick="movimentarSelecionado('entrada')"
+      >
+        ➕ Entrada
+      </button>
+
+
+      <button
+        class="danger"
+        onclick="movimentarSelecionado('saida')"
+      >
+        ➖ Saída
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="exportarCSV()"
+      >
+        📄 Exportar CSV
+      </button>
+
+
+      <button
+        class="primary"
+        onclick="imprimirEstoque()"
+      >
+        🖨️ Imprimir estoque
+      </button>
+
+
+      <button
+        class="warning"
+        onclick="backup()"
+      >
+        ⬇️ Fazer backup
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="
+          document
+          .getElementById('arquivoBackup')
+          .click()
+        "
+      >
+        ⬆️ Restaurar backup
+      </button>
+
+
+      <input
+        type="file"
+        id="arquivoBackup"
+        accept=".json"
+        style="display:none"
+        onchange="restaurarBackup(event)"
+      >
+
+    </div>
+
+
+    <div class="table-wrap">
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th></th>
+
+            <th>
+              Código
+            </th>
+
+            <th>
+              Cor
+            </th>
+
+            <th>
+              Qtd.
+            </th>
+
+            <th>
+              Localização
+            </th>
+
+            <th>
+              Observação
+            </th>
+
+            <th>
+              Ações
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="tabela"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       HISTÓRICO
+       ===================================================== -->
+
+  <div class="panel">
+
+    <div
+      style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        flex-wrap:wrap;
+      "
+    >
+
+      <h2 style="margin:0">
+        Histórico de movimentações
+      </h2>
+
+
+      <button
+        type="button"
+        class="danger"
+        style="
+          padding:7px 12px;
+          font-size:12px;
+        "
+        onclick="limparHistorico()"
+      >
+        🗑️ Limpar
+      </button>
+
+    </div>
+
+
+    <div
+      class="table-wrap"
+      style="margin-top:10px"
+    >
+
+      <table>
+
+        <thead>
+
+          <tr>
+
+            <th>
+              Data
+            </th>
+
+            <th>
+              Tipo
+            </th>
+
+            <th>
+              Código
+            </th>
+
+            <th>
+              Toner
+            </th>
+
+            <th>
+              Quantidade
+            </th>
+
+            <th>
+              Saldo
+            </th>
+
+          </tr>
+
+        </thead>
+
+
+        <tbody id="historico"></tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <!-- =====================================================
+       TÉCNICOS
+       ===================================================== -->
+
+  <div
+    class="panel"
+    id="painelTecnicos"
+  >
+
+    <div
+      style="
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:10px;
+        flex-wrap:wrap;
+      "
+    >
+
+      <h2 style="margin:0">
+        👥 Técnicos cadastrados
+      </h2>
+
+
+      <button
+        type="button"
+        class="secondary"
+        onclick="carregarTecnicos()"
+      >
+        🔄 Atualizar
+      </button>
+
+    </div>
+
+
+    <p style="color:#666;font-size:13px">
+
+      Somente o administrador pode visualizar
+      e excluir técnicos.
+
+    </p>
+
+
+    <div
+      id="listaTecnicos"
+      class="lista-tecnicos"
+    >
+
+      <div class="empty">
+        Carregando...
+      </div>
+
+    </div>
+
+  </div>
+
+
+</div>
+
+
+<!-- =====================================================
+     MODAL
+     ===================================================== -->
+
+<div
+  class="modal"
+  id="modal"
+>
+
+  <div class="modal-box">
+
+    <h2 id="modalTitle">
+      Movimentação
+    </h2>
+
+
+    <p id="modalInfo"></p>
+
+
+    <label>
+      Quantidade
+    </label>
+
+    <input
+      id="movQtd"
+      type="number"
+      min="1"
+      value="1"
+    >
+
+
+    <label style="margin-top:10px">
+      Observação
+    </label>
+
+    <textarea
+      id="movObs"
+      rows="3"
+      placeholder="Ex.: reposição, uso em impressora, entrega..."
+    ></textarea>
+
+
+    <div class="buttons">
+
+      <button
+        class="primary"
+        onclick="confirmarMovimentacao()"
+      >
+        Confirmar
+      </button>
+
+
+      <button
+        class="secondary"
+        onclick="fecharModal()"
+      >
+        Cancelar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<script>
 
 /* =====================================================
-CSV / BACKUP
-===================================================== */
+   VARIÁVEIS
+   ===================================================== */
+
+const LOGIN_USUARIO="admin";
+
+const CHAVE=
+  "estoque_toners_servidor";
+
+let tecnicos=[];
+
+let usuarioLogado=null;
+
+let selecionadoId=null;
+
+let tipoMov=null;
+
+
+/*
+  IMPORTANTE:
+
+  Nesta versão as impressoras são apenas
+  nomes, por exemplo:
+
+  [
+    "HP LaserJet",
+    "Brother DCP",
+    "Epson L3150"
+  ]
+
+  Não existe código 01, 02, 03.
+*/
+
+let dados={
+  toners:[],
+  movimentacoes:[],
+  impressoras:[]
+};
+
+
+const loginScreen=
+  document.getElementById(
+    "loginScreen"
+  );
+
+const loginForm=
+  document.getElementById(
+    "loginForm"
+  );
+
+const loginErro=
+  document.getElementById(
+    "loginErro"
+  );
+
+
+/* =====================================================
+   LOGIN / SISTEMA
+   ===================================================== */
+
+function liberarSistema(){
+
+  document.body.classList.remove(
+    "sistema-bloqueado"
+  );
+
+  loginScreen.style.display="none";
+
+}
+
+
+function bloquearSistema(){
+
+  document.body.classList.add(
+    "sistema-bloqueado"
+  );
+
+  loginScreen.style.display="flex";
+
+}
+
+
+function mostrarCadastroTecnico(){
+
+  document
+    .getElementById("loginArea")
+    .style.display="none";
+
+  document
+    .getElementById("cadastroTecnicoArea")
+    .style.display="block";
+
+  document
+    .getElementById("cadastroErro")
+    .style.display="none";
+
+}
+
+
+function mostrarLogin(){
+
+  document
+    .getElementById("cadastroTecnicoArea")
+    .style.display="none";
+
+  document
+    .getElementById("loginArea")
+    .style.display="block";
+
+  document
+    .getElementById("cadastroTecnicoForm")
+    .reset();
+
+}
+
+
+/* =====================================================
+   API
+   ===================================================== */
+
+async function api(
+  url,
+  options={}
+){
+
+  const r=
+    await fetch(
+      url,
+      {
+        credentials:"same-origin",
+        ...options,
+        headers:{
+          "Content-Type":
+            "application/json",
+          ...(options.headers||{})
+        }
+      }
+    );
+
+
+  let data={};
+
+
+  try{
+
+    data=await r.json();
+
+  }catch{}
+
+
+  if(!r.ok){
+
+    throw new Error(
+      data.error ||
+      "Erro de comunicação com o servidor."
+    );
+
+  }
+
+
+  return data;
+
+}
+
+
+/* =====================================================
+   CARREGAR ESTADO
+   ===================================================== */
+
+async function carregarEstado(){
+
+  dados=
+    await api(
+      "/api/state"
+    );
+
+
+  if(
+    !Array.isArray(
+      dados.toners
+    )
+  ){
+
+    dados.toners=[];
+
+  }
+
+
+  if(
+    !Array.isArray(
+      dados.movimentacoes
+    )
+  ){
+
+    dados.movimentacoes=[];
+
+  }
+
+
+  if(
+    !Array.isArray(
+      dados.impressoras
+    )
+  ){
+
+    dados.impressoras=[];
+
+  }
+
+
+  renderImpressoras();
+
+  renderTudo();
+
+}
+
+
+/* =====================================================
+   SALVAR
+   ===================================================== */
+
+async function salvarDados(){
+
+  await api(
+    "/api/state",
+    {
+      method:"PUT",
+      body:JSON.stringify(
+        dados
+      )
+    }
+  );
+
+}
+
+
+/* =====================================================
+   LOGIN
+   ===================================================== */
+
+loginForm.addEventListener(
+  "submit",
+  async function(e){
+
+    e.preventDefault();
+
+
+    const usuario=
+      document
+        .getElementById(
+          "loginUsuario"
+        )
+        .value
+        .trim();
+
+
+    const senha=
+      document
+        .getElementById(
+          "loginSenha"
+        )
+        .value;
+
+
+    try{
+
+      const resposta=
+        await api(
+          "/api/login",
+          {
+            method:"POST",
+
+            body:JSON.stringify({
+
+              name:usuario,
+
+              password:senha,
+
+              stayLogged:
+                document
+                  .getElementById(
+                    "ficarLogado"
+                  )
+                  .checked
+
+            })
+          }
+        );
+
+
+      usuarioLogado=
+        resposta.user;
+
+
+      await carregarEstado();
+
+      await carregarTecnicos();
+
+      liberarSistema();
+
+
+    }catch(err){
+
+      loginErro.textContent=
+        err.message;
+
+      loginErro.style.display=
+        "block";
+
+    }
+
+  }
+);
+
+
+/* =====================================================
+   CADASTRO DE TÉCNICO
+   ===================================================== */
+
+document
+  .getElementById(
+    "cadastroTecnicoForm"
+  )
+  .addEventListener(
+    "submit",
+    async function(e){
+
+      e.preventDefault();
+
+
+      const nome=
+        document
+          .getElementById(
+            "novoTecnicoNome"
+          )
+          .value
+          .trim();
+
+
+      const senha=
+        document
+          .getElementById(
+            "novoTecnicoSenha"
+          )
+          .value;
+
+
+      const senha2=
+        document
+          .getElementById(
+            "novoTecnicoSenha2"
+          )
+          .value;
+
+
+      const senhaAdmin=
+        document
+          .getElementById(
+            "senhaAdminCadastro"
+          )
+          .value;
+
+
+      const erro=
+        document.getElementById(
+          "cadastroErro"
+        );
+
+
+      function mostrarErro(msg){
+
+        erro.textContent=msg;
+
+        erro.style.display=
+          "block";
+
+      }
+
+
+      if(!nome){
+
+        mostrarErro(
+          "Informe o nome do técnico."
+        );
+
+        return;
+
+      }
+
+
+      if(
+        nome.toLowerCase()==="admin"
+      ){
+
+        mostrarErro(
+          "Esse nome é reservado para o administrador."
+        );
+
+        return;
+
+      }
+
+
+      if(!/^\d{4}$/.test(senha)){
+
+        mostrarErro(
+          "A senha deve ter exatamente 4 dígitos."
+        );
+
+        return;
+
+      }
+
+
+      if(senha!==senha2){
+
+        mostrarErro(
+          "As senhas não conferem."
+        );
+
+        return;
+
+      }
+
+
+      if(!/^\d{4}$/.test(senhaAdmin)){
+
+        mostrarErro(
+          "Informe a senha de administrador."
+        );
+
+        return;
+
+      }
+
+
+      try{
+
+        await api(
+          "/api/technicians",
+          {
+            method:"POST",
+
+            body:JSON.stringify({
+
+              name:nome,
+
+              password:senha,
+
+              adminPassword:senhaAdmin
+
+            })
+          }
+        );
+
+
+        alert(
+          "Técnico cadastrado com sucesso!"
+        );
+
+
+        document
+          .getElementById(
+            "cadastroTecnicoForm"
+          )
+          .reset();
+
+
+        mostrarLogin();
+
+
+      }catch(err){
+
+        mostrarErro(
+          err.message
+        );
+
+      }
+
+    }
+  );
+
+
+/* =====================================================
+   INICIAR
+   ===================================================== */
+
+async function iniciar(){
+
+  try{
+
+    const resposta=
+      await api(
+        "/api/me"
+      );
+
+
+    usuarioLogado=
+      resposta.user;
+
+
+    await carregarEstado();
+
+    await carregarTecnicos();
+
+    liberarSistema();
+
+
+  }catch{
+
+    usuarioLogado=null;
+
+    bloquearSistema();
+
+  }
+
+}
+
+
+/* =====================================================
+   TÉCNICOS
+   ===================================================== */
+
+async function carregarTecnicos(){
+
+  const painel=
+    document.getElementById(
+      "painelTecnicos"
+    );
+
+
+  const lista=
+    document.getElementById(
+      "listaTecnicos"
+    );
+
+
+  if(
+    !usuarioLogado ||
+    usuarioLogado.id!=="admin"
+  ){
+
+    painel.style.display="none";
+
+    return;
+
+  }
+
+
+  painel.style.display="block";
+
+
+  try{
+
+    const resposta=
+      await api(
+        "/api/technicians"
+      );
+
+
+    tecnicos=
+      resposta.technicians || [];
+
+
+    if(!tecnicos.length){
+
+      lista.innerHTML=
+        `<div class="empty">
+          Nenhum técnico cadastrado.
+        </div>`;
+
+      return;
+
+    }
+
+
+    lista.innerHTML=
+      tecnicos
+        .map(t=>`
+
+          <div class="tecnico-item">
+
+            <div class="tecnico-info">
+
+              <strong>
+                👤 ${esc(t.name)}
+              </strong>
+
+              <small>
+                Cadastrado em:
+                ${new Date(
+                  t.created_at
+                ).toLocaleString("pt-BR")}
+              </small>
+
+            </div>
+
+
+            <button
+              type="button"
+              class="danger"
+              onclick="
+                excluirTecnico(
+                  '${t.id}',
+                  '${String(t.name)
+                    .replace(/'/g,"\\'")}'
+                )
+              "
+            >
+              🗑️ Excluir
+            </button>
+
+          </div>
+
+        `)
+        .join("");
+
+
+  }catch(err){
+
+    lista.innerHTML=
+      `<div class="empty">
+        ${esc(err.message)}
+      </div>`;
+
+  }
+
+}
+
+
+async function excluirTecnico(
+  idTecnico,
+  nomeTecnico
+){
+
+  if(
+    !confirm(
+      `Tem certeza que deseja excluir o técnico "${nomeTecnico}"?`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  try{
+
+    await api(
+      `/api/technicians/${idTecnico}`,
+      {
+        method:"DELETE"
+      }
+    );
+
+
+    alert(
+      "Técnico excluído com sucesso."
+    );
+
+
+    await carregarTecnicos();
+
+
+  }catch(err){
+
+    alert(
+      err.message
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   UTILIDADES
+   ===================================================== */
+
+function id(){
+
+  return Date.now().toString(36)+
+    Math.random()
+      .toString(36)
+      .slice(2,7);
+
+}
+
+
+function esc(s){
+
+  return String(
+    s??""
+  ).replace(
+    /[&<>"']/g,
+    m=>({
+
+      "&":"&amp;",
+      "<":"&lt;",
+      ">":"&gt;",
+      '"':"&quot;",
+      "'":"&#039;"
+
+    }[m])
+  );
+
+}
+
+
+/* =====================================================
+   IMPRESSORAS
+   ===================================================== */
+
+function renderImpressoras(){
+
+  const select=
+    document.getElementById(
+      "impressora"
+    );
+
+
+  const atual=
+    select.value;
+
+
+  select.innerHTML=
+    `<option value="">
+      Selecione a impressora
+    </option>`+
+    dados.impressoras
+      .map(
+        p=>
+          `<option value="${esc(p)}">
+            ${esc(p)}
+          </option>`
+      )
+      .join("");
+
+
+  if(
+    atual &&
+    dados.impressoras.includes(atual)
+  ){
+
+    select.value=atual;
+
+  }
+
+}
+
+
+/* =====================================================
+   CADASTRAR IMPRESSORA
+   ===================================================== */
+
+async function cadastrarImpressora(){
+
+  const nome=
+    prompt(
+      "Digite o nome/modelo da impressora:"
+    );
+
+
+  if(nome===null)return;
+
+
+  const n=
+    nome.trim();
+
+
+  if(!n)return;
+
+
+  if(
+    dados.impressoras.some(
+      p=>
+        p.toLowerCase()===
+        n.toLowerCase()
+    )
+  ){
+
+    alert(
+      "Essa impressora já está cadastrada."
+    );
+
+    return;
+
+  }
+
+
+  dados.impressoras.push(n);
+
+
+  try{
+
+    await salvarDados();
+
+    renderImpressoras();
+
+    document
+      .getElementById(
+        "impressora"
+      )
+      .value=n;
+
+
+  }catch{}
+
+}
+
+
+/* =====================================================
+   REMOVER IMPRESSORA
+   ===================================================== */
+
+async function removerImpressora(){
+
+  const select=
+    document.getElementById(
+      "impressora"
+    );
+
+
+  const nome=
+    select.value;
+
+
+  if(!nome){
+
+    alert(
+      "Selecione a impressora que deseja remover."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    !confirm(
+      `Remover a impressora "${nome}"?\n\n`+
+      `Os toners já cadastrados não serão apagados.`
+    )
+  ){
+
+    return;
+
+  }
+
+
+  dados.impressoras=
+    dados.impressoras.filter(
+      p=>p!==nome
+    );
+
+
+  try{
+
+    await salvarDados();
+
+    renderImpressoras();
+
+    select.value="";
+
+
+  }catch{}
+
+}
+
+
+/* =====================================================
+   TONER
+   ===================================================== */
+
+document
+  .getElementById(
+    "tonerForm"
+  )
+  .addEventListener(
+    "submit",
+    async function(e){
+
+      e.preventDefault();
+
+
+      const edit=
+        document
+          .getElementById(
+            "editId"
+          )
+          .value;
+
+
+      const obj={
+
+        codigo:
+          document
+            .getElementById(
+              "codigo"
+            )
+            .value
+            .trim(),
+
+        toner:
+          document
+            .getElementById(
+              "toner"
+            )
+            .value,
+
+        impressora:
+          document
+            .getElementById(
+              "impressora"
+            )
+            .value,
+
+        quantidade:
+          Number(
+            document
+              .getElementById(
+                "quantidade"
+              )
+              .value
+          ),
+
+        localizacao:
+          "Prefeitura de Grajaú-MA",
+
+        observacao:
+          document
+            .getElementById(
+              "observacao"
+            )
+            .value
+            .trim()
+
+      };
+
+
+      if(
+        obj.impressora &&
+        !dados.impressoras.includes(
+          obj.impressora
+        )
+      ){
+
+        dados.impressoras.push(
+          obj.impressora
+        );
+
+      }
+
+
+      if(edit){
+
+        const i=
+          dados.toners.findIndex(
+            x=>x.id===edit
+          );
+
+
+        if(i>=0){
+
+          dados.toners[i]={
+
+            ...dados.toners[i],
+
+            ...obj
+
+          };
+
+        }
+
+      }else{
+
+
+        if(
+          dados.toners.some(
+            x=>
+              x.codigo.toLowerCase()===
+              obj.codigo.toLowerCase()
+          )
+        ){
+
+          alert(
+            "Já existe um toner com este código."
+          );
+
+          return;
+
+        }
+
+
+        obj.id=id();
+
+
+        dados.toners.push(
+          obj
+        );
+
+
+        if(
+          obj.quantidade>0
+        ){
+
+          dados.movimentacoes.unshift({
+
+            id:id(),
+
+            data:
+              new Date().toISOString(),
+
+            tipo:
+              "Entrada inicial",
+
+            tonerId:
+              obj.id,
+
+            codigo:
+              obj.codigo,
+
+            toner:
+              obj.toner,
+
+            quantidade:
+              obj.quantidade,
+
+            saldo:
+              obj.quantidade,
+
+            observacao:
+              "Cadastro inicial"
+
+          });
+
+        }
+
+      }
+
+
+      dados.movimentacoes=
+        dados.movimentacoes
+          .slice(0,5);
+
+
+      try{
+
+        await salvarDados();
+
+        renderImpressoras();
+
+        limparFormulario();
+
+        renderTudo();
+
+      }catch{}
+
+    }
+  );
+
+
+/* =====================================================
+   LIMPAR FORMULÁRIO
+   ===================================================== */
+
+function limparFormulario(){
+
+  document
+    .getElementById(
+      "tonerForm"
+    )
+    .reset();
+
+
+  document
+    .getElementById(
+      "editId"
+    )
+    .value="";
+
+
+  document
+    .getElementById(
+      "quantidade"
+    )
+    .value=0;
+
+
+  document
+    .getElementById(
+      "formTitle"
+    )
+    .textContent=
+      "Cadastrar toner";
+
+}
+
+
+/* =====================================================
+   CARDS
+   ===================================================== */
+
+function atualizarCards(){
+
+  document
+    .getElementById(
+      "totalTipos"
+    )
+    .textContent=
+      dados.toners.length;
+
+
+  document
+    .getElementById(
+      "totalUnidades"
+    )
+    .textContent=
+      dados.toners.reduce(
+        (s,x)=>
+          s+Number(x.quantidade),
+        0
+      );
+
+
+  document
+    .getElementById(
+      "totalMov"
+    )
+    .textContent=
+      dados.movimentacoes.length;
+
+}
+
+
+function renderTudo(){
+
+  renderTabela();
+
+  renderHistorico();
+
+  atualizarCards();
+
+}
+
+
+/* =====================================================
+   TABELA
+   ===================================================== */
+
+function renderTabela(){
+
+  const q=
+    document
+      .getElementById(
+        "busca"
+      )
+      .value
+      .toLowerCase();
+
+
+  const lista=
+    dados.toners.filter(
+      x=>
+        [
+          x.codigo,
+          x.toner,
+          x.impressora,
+          x.localizacao
+        ]
+        .join(" ")
+        .toLowerCase()
+        .includes(q)
+    );
+
+
+  const grupos={};
+
+
+  lista.forEach(x=>{
+
+    const chave=
+      x.impressora ||
+      "Sem impressora";
+
+
+    if(!grupos[chave]){
+
+      grupos[chave]=[];
+
+    }
+
+
+    grupos[chave].push(x);
+
+  });
+
+
+  const nomes=
+    Object.keys(grupos);
+
+
+  if(!nomes.length){
+
+    document
+      .getElementById(
+        "tabela"
+      )
+      .innerHTML=
+      `<tr>
+
+        <td
+          colspan="7"
+          class="empty"
+        >
+          Nenhum toner cadastrado.
+        </td>
+
+      </tr>`;
+
+    return;
+
+  }
+
+
+  document
+    .getElementById(
+      "tabela"
+    )
+    .innerHTML=
+
+
+      nomes.map(nome=>`
+
+        <tr class="printer-group">
+
+          <td colspan="7">
+
+            🖨️
+            ${esc(nome)}
+
+          </td>
+
+        </tr>
+
+
+        ${grupos[nome]
+          .map(x=>`
+
+            <tr
+              onclick="
+                if(
+                  !event.target.closest('button') &&
+                  !event.target.closest('input')
+                ){
+                  selecionarLinha(this)
+                }
+              "
+            >
+
+              <td>
+
+                <input
+                  type="radio"
+                  name="sel"
+                  onchange="
+                    selecionadoId='${x.id}'
+                  "
+                >
+
+              </td>
+
+
+              <td>
+                ${esc(x.codigo)}
+              </td>
+
+
+              <td>
+                ${esc(x.toner)}
+              </td>
+
+
+              <td
+                class="${
+                  Number(x.quantidade)<=3
+                    ? "low"
+                    : "ok"
+                }"
+              >
+                ${x.quantidade}
+              </td>
+
+
+              <td>
+                ${esc(x.localizacao)}
+              </td>
+
+
+              <td>
+                ${esc(x.observacao)}
+              </td>
+
+
+              <td class="actions">
+
+                <button
+                  class="primary"
+                  onclick="
+                    event.stopPropagation();
+                    editar('${x.id}')
+                  "
+                >
+                  Editar
+                </button>
+
+
+                <button
+                  class="danger"
+                  onclick="
+                    event.stopPropagation();
+                    excluir('${x.id}')
+                  "
+                >
+                  Excluir
+                </button>
+
+              </td>
+
+            </tr>
+
+          `)
+          .join("")}
+
+      `)
+      .join("");
+
+}
+
+
+/* =====================================================
+   SELECIONAR
+   ===================================================== */
+
+function selecionarLinha(el){
+
+  if(
+    el.classList.contains(
+      "printer-group"
+    )
+  ){
+
+    return;
+
+  }
+
+
+  const radio=
+    el.querySelector(
+      'input[type="radio"]'
+    );
+
+
+  if(radio){
+
+    radio.checked=true;
+
+    selecionadoId=
+      radio
+        .getAttribute(
+          "onchange"
+        )
+        .match(
+          /'([^']+)'/
+        )[1];
+
+  }
+
+}
+
+
+/* =====================================================
+   EDITAR TONER
+   ===================================================== */
+
+function editar(idv){
+
+  const x=
+    dados.toners.find(
+      x=>x.id===idv
+    );
+
+
+  if(!x)return;
+
+
+  document
+    .getElementById(
+      "editId"
+    )
+    .value=x.id;
+
+
+  document
+    .getElementById(
+      "codigo"
+    )
+    .value=x.codigo;
+
+
+  document
+    .getElementById(
+      "toner"
+    )
+    .value=x.toner;
+
+
+  renderImpressoras();
+
+
+  document
+    .getElementById(
+      "impressora"
+    )
+    .value=x.impressora;
+
+
+  document
+    .getElementById(
+      "quantidade"
+    )
+    .value=x.quantidade;
+
+
+  document
+    .getElementById(
+      "observacao"
+    )
+    .value=x.observacao;
+
+
+  document
+    .getElementById(
+      "formTitle"
+    )
+    .textContent=
+      "Editar toner";
+
+
+  window.scrollTo({
+
+    top:0,
+
+    behavior:"smooth"
+
+  });
+
+}
+
+
+/* =====================================================
+   EXCLUIR TONER
+   ===================================================== */
+
+async function excluir(idv){
+
+  const x=
+    dados.toners.find(
+      x=>x.id===idv
+    );
+
+
+  if(!x)return;
+
+
+  if(
+    confirm(
+      `Excluir o toner ${x.codigo}?`
+    )
+  ){
+
+    dados.toners=
+      dados.toners.filter(
+        x=>x.id!==idv
+      );
+
+
+    try{
+
+      await salvarDados();
+
+      renderTudo();
+
+    }catch{}
+
+  }
+
+}
+
+
+/* =====================================================
+   MOVIMENTAÇÃO
+   ===================================================== */
+
+function movimentarSelecionado(tipo){
+
+  if(!selecionadoId){
+
+    alert(
+      "Selecione um toner na tabela primeiro."
+    );
+
+    return;
+
+  }
+
+
+  const x=
+    dados.toners.find(
+      x=>x.id===selecionadoId
+    );
+
+
+  if(!x)return;
+
+
+  tipoMov=tipo;
+
+
+  document
+    .getElementById(
+      "modal"
+    )
+    .classList.add("show");
+
+
+  document
+    .getElementById(
+      "modalTitle"
+    )
+    .textContent=
+      tipo==="entrada"
+        ? "➕ Registrar entrada"
+        : "➖ Registrar saída";
+
+
+  document
+    .getElementById(
+      "modalInfo"
+    )
+    .textContent=
+      `${x.codigo} — ${x.toner} | Estoque atual: ${x.quantidade}`;
+
+
+  document
+    .getElementById(
+      "movQtd"
+    )
+    .value=1;
+
+
+  document
+    .getElementById(
+      "movObs"
+    )
+    .value="";
+
+}
+
+
+function fecharModal(){
+
+  document
+    .getElementById(
+      "modal"
+    )
+    .classList.remove(
+      "show"
+    );
+
+}
+
+
+async function confirmarMovimentacao(){
+
+  const x=
+    dados.toners.find(
+      x=>x.id===selecionadoId
+    );
+
+
+  const qtd=
+    Number(
+      document
+        .getElementById(
+          "movQtd"
+        )
+        .value
+    );
+
+
+  if(!x || qtd<1){
+
+    alert(
+      "Informe uma quantidade válida."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    tipoMov==="saida" &&
+    qtd>x.quantidade
+  ){
+
+    alert(
+      "A saída não pode ser maior que o estoque atual."
+    );
+
+    return;
+
+  }
+
+
+  if(tipoMov==="entrada"){
+
+    x.quantidade+=qtd;
+
+  }else{
+
+    x.quantidade-=qtd;
+
+  }
+
+
+  dados.movimentacoes.unshift({
+
+    id:id(),
+
+    data:
+      new Date().toISOString(),
+
+    tipo:
+      tipoMov==="entrada"
+        ? "Entrada"
+        : "Saída",
+
+    tonerId:
+      x.id,
+
+    codigo:
+      x.codigo,
+
+    toner:
+      x.toner,
+
+    quantidade:
+      qtd,
+
+    saldo:
+      x.quantidade,
+
+    observacao:
+      document
+        .getElementById(
+          "movObs"
+        )
+        .value
+        .trim()
+
+  });
+
+
+  dados.movimentacoes=
+    dados.movimentacoes.slice(
+      0,
+      5
+    );
+
+
+  try{
+
+    await salvarDados();
+
+    fecharModal();
+
+    renderTudo();
+
+  }catch{}
+
+}
+
+
+/* =====================================================
+   HISTÓRICO
+   ===================================================== */
+
+async function limparHistorico(){
+
+  if(
+    !dados.movimentacoes.length
+  ){
+
+    alert(
+      "O histórico já está vazio."
+    );
+
+    return;
+
+  }
+
+
+  if(
+    confirm(
+      "Tem certeza que deseja limpar o histórico?"
+    )
+  ){
+
+    dados.movimentacoes=[];
+
+
+    try{
+
+      await salvarDados();
+
+      renderTudo();
+
+    }catch{}
+
+  }
+
+}
+
+
+function renderHistorico(){
+
+  const el=
+    document.getElementById(
+      "historico"
+    );
+
+
+  if(
+    !dados.movimentacoes.length
+  ){
+
+    el.innerHTML=
+      `<tr>
+
+        <td
+          colspan="6"
+          class="empty"
+        >
+          Nenhuma movimentação registrada.
+        </td>
+
+      </tr>`;
+
+    return;
+
+  }
+
+
+  el.innerHTML=
+    dados.movimentacoes
+      .slice(0,5)
+      .map(m=>`
+
+        <tr>
+
+          <td>
+            ${new Date(
+              m.data
+            ).toLocaleString("pt-BR")}
+          </td>
+
+          <td>
+            ${esc(m.tipo)}
+          </td>
+
+          <td>
+            ${esc(m.codigo)}
+          </td>
+
+          <td>
+            ${esc(m.toner)}
+          </td>
+
+          <td>
+            ${m.quantidade}
+          </td>
+
+          <td>
+            ${m.saldo}
+          </td>
+
+        </tr>
+
+      `)
+      .join("");
+
+}
+
+
+/* =====================================================
+   IMPRESSÃO
+   ===================================================== */
+
+function imprimirEstoque(){
+
+  const lista=
+    dados.toners.slice();
+
+
+  const grupos={};
+
+
+  lista.forEach(x=>{
+
+    const nome=
+      x.impressora ||
+      "Impressora não informada";
+
+
+    if(!grupos[nome]){
+
+      grupos[nome]=[];
+
+    }
+
+
+    grupos[nome].push(x);
+
+  });
+
+
+  const ordemCores={
+
+    "Preto":1,
+    "Ciano":2,
+    "Magenta":3,
+    "Amarelo":4,
+    "Colorido":5
+
+  };
+
+
+  const nomes=
+    Object.keys(grupos)
+      .sort(
+        (a,b)=>
+          a.localeCompare(
+            b,
+            "pt-BR"
+          )
+      );
+
+
+  const blocos=
+    nomes.map(nome=>{
+
+      const itens=
+        grupos[nome].sort(
+          (a,b)=>
+            (
+              ordemCores[a.toner]||99
+            )-
+            (
+              ordemCores[b.toner]||99
+            )
+        );
+
+
+      return `
+
+        <section
+          style="
+            margin-bottom:25px;
+            page-break-inside:avoid;
+          "
+        >
+
+          <h3
+            style="
+              background:#e9eef2;
+              padding:10px;
+              border:1px solid #aaa;
+            "
+          >
+            🖨️ ${esc(nome)}
+          </h3>
+
+
+          <table
+            style="
+              width:100%;
+              border-collapse:collapse;
+            "
+          >
+
+            <thead>
+
+              <tr>
+
+                <th
+                  style="
+                    border:1px solid #999;
+                    padding:7px;
+                  "
+                >
+                  Código
+                </th>
+
+                <th
+                  style="
+                    border:1px solid #999;
+                    padding:7px;
+                  "
+                >
+                  Cor
+                </th>
+
+                <th
+                  style="
+                    border:1px solid #999;
+                    padding:7px;
+                  "
+                >
+                  Quantidade
+                </th>
+
+                <th
+                  style="
+                    border:1px solid #999;
+                    padding:7px;
+                  "
+                >
+                  Observação
+                </th>
+
+              </tr>
+
+            </thead>
+
+
+            <tbody>
+
+              ${itens.map(x=>`
+
+                <tr
+                  style="
+                    ${
+                      Number(x.quantidade)<=3
+                        ? "color:#c62828;font-weight:bold;"
+                        : ""
+                    }
+                  "
+                >
+
+                  <td
+                    style="
+                      border:1px solid #999;
+                      padding:7px;
+                    "
+                  >
+                    ${esc(x.codigo)}
+                  </td>
+
+                  <td
+                    style="
+                      border:1px solid #999;
+                      padding:7px;
+                    "
+                  >
+                    ${esc(x.toner)}
+                  </td>
+
+                  <td
+                    style="
+                      border:1px solid #999;
+                      padding:7px;
+                    "
+                  >
+                    ${x.quantidade}
+                  </td>
+
+                  <td
+                    style="
+                      border:1px solid #999;
+                      padding:7px;
+                    "
+                  >
+                    ${esc(x.observacao)}
+                  </td>
+
+                </tr>
+
+              `).join("")}
+
+            </tbody>
+
+          </table>
+
+        </section>
+
+      `;
+
+    }).join("");
+
+
+  const pedidos=
+    lista.filter(
+      x=>
+        Number(x.quantidade)<=3
+    );
+
+
+  const pedidosHtml=
+    pedidos.length
+
+      ?
+
+      pedidos.map(x=>`
+
+        <li>
+
+          🖨️
+          ${esc(x.impressora)}
+
+          —
+
+          ${esc(x.toner)}
+
+          —
+
+          Código:
+          ${esc(x.codigo)}
+
+        </li>
+
+      `).join("")
+
+      :
+
+      `<li>
+        Nenhum pedido necessário.
+      </li>`;
+
+
+  const janela=
+    window.open(
+      "",
+      "_blank",
+      "width=1000,height=700"
+    );
+
+
+  if(!janela){
+
+    alert(
+      "Permita pop-ups para imprimir o relatório."
+    );
+
+    return;
+
+  }
+
+
+  janela.document.write(`
+
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+Estoque de Toners
+</title>
+
+<style>
+
+body{
+  font-family:Arial,sans-serif;
+  margin:25px;
+}
+
+h1{
+  text-align:center;
+  font-size:22px;
+}
+
+h2{
+  text-align:center;
+  font-size:15px;
+  font-weight:normal;
+}
+
+table{
+  font-size:12px;
+}
+
+.pedidos{
+  margin-top:30px;
+  border-top:3px solid #222;
+  padding-top:15px;
+  page-break-inside:avoid;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>
+CONTROLE DE ESTOQUE DE TONERS
+</h1>
+
+<h2>
+Prefeitura de Grajaú-MA
+</h2>
+
+<p>
+Data:
+${new Date().toLocaleString("pt-BR")}
+</p>
+
+${blocos}
+
+<div class="pedidos">
+
+<h2 style="text-align:left;font-weight:bold">
+📋 PEDIDOS DE NOVOS TONERS
+</h2>
+
+<ul>
+
+${pedidosHtml}
+
+</ul>
+
+</div>
+
+</body>
+
+</html>
+
+`);
+
+
+  janela.document.close();
+
+
+  janela.onload=function(){
+
+    janela.print();
+
+  };
+
+}
+
+
+/* =====================================================
+   CSV
+   ===================================================== */
 
 function exportarCSV(){
 
-const cab=
-"Código;Cor;Impressora;Quantidade;Localização;Observação\n";
+  const cab=
+    "Código;Cor;Impressora;Quantidade;Localização;Observação\n";
 
-const linhas=
-dados.toners
-.map(x=>[
-x.codigo,
-x.toner,
-x.impressora,
-x.quantidade,
-x.localizacao,
-x.observacao
-])
-.map(
-v=>
-v
-.map(
-v=>
-"${String(v??"")   .replaceAll('"','""')}"
-)
-.join(";")
-)
-.join("\n");
 
-baixar(
-"\uFEFF"+cab+linhas,
-"estoque_toners.csv",
-"text/csv;charset=utf-8"
-);
+  const linhas=
+    dados.toners
+      .map(x=>[
+
+        x.codigo,
+        x.toner,
+        x.impressora,
+        x.quantidade,
+        x.localizacao,
+        x.observacao
+
+      ])
+      .map(
+        v=>
+          v
+            .map(
+              v=>
+                `"${String(v??"")
+                  .replaceAll(
+                    '"',
+                    '""'
+                  )}"`
+            )
+            .join(";")
+      )
+      .join("\n");
+
+
+  baixar(
+
+    "\uFEFF"+
+    cab+
+    linhas,
+
+    "estoque_toners.csv",
+
+    "text/csv;charset=utf-8"
+
+  );
 
 }
+
+
+/* =====================================================
+   BACKUP
+   ===================================================== */
 
 function backup(){
 
-baixar(
-JSON.stringify(
-dados,
-null,
-2
-),
-"backup_estoque_toners.json",
-"application/json"
-);
+  baixar(
+
+    JSON.stringify(
+      dados,
+      null,
+      2
+    ),
+
+    "backup_estoque_toners.json",
+
+    "application/json"
+
+  );
 
 }
+
 
 function baixar(
-conteudo,
-nome,
-tipo
+  conteudo,
+  nome,
+  tipo
 ){
 
-const a=
-document.createElement("a");
+  const a=
+    document.createElement(
+      "a"
+    );
 
-a.href=
-URL.createObjectURL(
-new Blob(
-[conteudo],
-{type:tipo}
-)
-);
 
-a.download=nome;
+  const url=
+    URL.createObjectURL(
+      new Blob(
+        [conteudo],
+        {type:tipo}
+      )
+    );
 
-a.click();
 
-URL.revokeObjectURL(
-a.href
-);
+  a.href=url;
+
+  a.download=nome;
+
+  a.click();
+
+
+  setTimeout(
+    ()=>{
+      URL.revokeObjectURL(url);
+    },
+    1000
+  );
 
 }
+
+
+/* =====================================================
+   RESTAURAR BACKUP
+   ===================================================== */
 
 function restaurarBackup(e){
 
-const arq=
-e.target.files[0];
+  const arq=
+    e.target.files[0];
 
-if(!arq)return;
 
-const r=
-new FileReader();
+  if(!arq)return;
 
-r.onload=()=>{
 
-try{  
+  const r=
+    new FileReader();
 
-  const novo=  
-    JSON.parse(  
-      r.result  
-    );  
 
-  if(  
-    !Array.isArray(novo.toners) ||  
-    !Array.isArray(novo.movimentacoes)  
-  ){  
-    throw Error();  
-  }  
+  r.onload=async function(){
 
-  if(  
-    confirm(  
-      "Restaurar este backup? Os dados atuais serão substituídos."  
-    )  
-  ){  
+    try{
 
-    dados=novo;  
+      const novo=
+        JSON.parse(
+          r.result
+        );
 
-    salvarDados();  
 
-    renderTudo();  
+      if(
+        !Array.isArray(
+          novo.toners
+        ) ||
+        !Array.isArray(
+          novo.movimentacoes
+        )
+      ){
 
-    alert(  
-      "Backup restaurado."  
-    );  
+        throw new Error();
 
-  }  
+      }
 
-}catch{  
 
-  alert(  
-    "Arquivo de backup inválido."  
-  );  
+      if(
+        !Array.isArray(
+          novo.impressoras
+        )
+      ){
 
-}  
+        novo.impressoras=[];
 
-e.target.value="";
+      }
 
-};
 
-r.readAsText(arq);
+      if(
+        confirm(
+          "Restaurar este backup? Os dados atuais serão substituídos."
+        )
+      ){
+
+        dados=novo;
+
+
+        await salvarDados();
+
+
+        renderImpressoras();
+
+        renderTudo();
+
+
+        alert(
+          "Backup restaurado com sucesso."
+        );
+
+      }
+
+    }catch{
+
+      alert(
+        "Arquivo de backup inválido."
+      );
+
+    }
+
+
+    e.target.value="";
+
+  };
+
+
+  r.readAsText(arq);
 
 }
 
+
 /* =====================================================
-SAIR
-===================================================== */
+   SAIR
+   ===================================================== */
 
 async function sairSistema(){
 
-try{
+  try{
 
-await api(  
-  "/api/logout",  
-  {  
-    method:"POST"  
-  }  
-);
+    await api(
+      "/api/logout",
+      {
+        method:"POST"
+      }
+    );
 
-}catch{}
+  }catch{}
 
-usuarioLogado=null;
 
-tecnicos=[];
+  usuarioLogado=null;
 
-document
-.getElementById("painelTecnicos")
-.style.display="none";
+  tecnicos=[];
 
-dados={
-toners:[],
-movimentacoes:[],
-impressoras:[]
-};
 
-document
-.getElementById("loginForm")
-.reset();
+  dados={
 
-mostrarLogin();
+    toners:[],
 
-bloquearSistema();
+    movimentacoes:[],
 
-document
-.getElementById("loginUsuario")
-.focus();
+    impressoras:[]
+
+  };
+
+
+  document
+    .getElementById(
+      "loginForm"
+    )
+    .reset();
+
+
+  mostrarLogin();
+
+  bloquearSistema();
 
 }
 
+
 /* =====================================================
-INICIAR
-===================================================== */
+   INICIAR
+   ===================================================== */
 
 iniciar();
 
-</script>  </body>  
+</script>
+
+</body>
 </html>
