@@ -35,7 +35,7 @@ header h1{
   line-height:1.2
 }
 
-#btnSairSistema{
+#btnSair{
   background:#c62828;
   color:#fff;
   border:0;
@@ -48,13 +48,18 @@ header h1{
   box-shadow:0 2px 5px #0003
 }
 
-#btnSairSistema:active{
+#btnSair:active{
   transform:scale(.98)
 }
 
 header p{
   max-width:1200px;
   margin:7px auto 0;
+  color:#cfd8dc
+}
+
+header p{
+  margin:0;
   color:#cfd8dc
 }
 
@@ -109,9 +114,7 @@ label{
   margin-bottom:5px
 }
 
-input,
-select,
-textarea{
+input,select,textarea{
   width:100%;
   padding:10px;
   border:1px solid #ccc;
@@ -181,8 +184,7 @@ table{
   min-width:850px
 }
 
-th,
-td{
+th,td{
   padding:10px;
   border-bottom:1px solid #eee;
   text-align:left;
@@ -216,8 +218,7 @@ th{
   background:#0008;
   align-items:center;
   justify-content:center;
-  padding:15px;
-  z-index:5000
+  padding:15px
 }
 
 .modal.show{
@@ -244,117 +245,6 @@ th{
   padding:25px
 }
 
-/* LOGIN */
-
-.login-screen{
-  position:fixed;
-  inset:0;
-  background:linear-gradient(135deg,#1976d2,#0d47a1);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:9999
-}
-
-.login-box{
-  width:100%;
-  max-width:380px;
-  background:#fff;
-  border-radius:16px;
-  padding:30px;
-  box-shadow:0 12px 40px rgba(0,0,0,.25)
-}
-
-.login-box h1{
-  text-align:center;
-  margin:0 0 8px;
-  color:#1976d2;
-  font-size:25px
-}
-
-.login-box p{
-  text-align:center;
-  color:#666;
-  margin:0 0 24px
-}
-
-.login-box label{
-  display:block;
-  font-weight:600;
-  margin:12px 0 6px
-}
-
-.login-box input{
-  width:100%;
-  box-sizing:border-box;
-  padding:12px;
-  border:1px solid #ccc;
-  border-radius:8px;
-  font-size:16px
-}
-
-.login-btn{
-  width:100%;
-  margin-top:20px;
-  padding:12px;
-  border:0;
-  border-radius:8px;
-  background:#1976d2;
-  color:#fff;
-  font-size:16px;
-  font-weight:700;
-  cursor:pointer
-}
-
-.login-error{
-  display:none;
-  color:#c62828;
-  text-align:center;
-  margin-top:12px;
-  font-size:14px
-}
-
-body.sistema-bloqueado>header,
-body.sistema-bloqueado>.container,
-body.sistema-bloqueado>.modal{
-  display:none
-}
-
-/* TÉCNICOS */
-
-#painelTecnicos{
-  display:none
-}
-
-.lista-tecnicos{
-  display:grid;
-  gap:10px
-}
-
-.tecnico-item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  background:#f8f9fa
-}
-
-.tecnico-info strong{
-  display:block;
-  font-size:15px
-}
-
-.tecnico-info small{
-  color:#666;
-  font-size:12px
-}
-
-/* CELULAR */
-
 @media(max-width:800px){
 
   .cards{
@@ -364,6 +254,7 @@ body.sistema-bloqueado>.modal{
   .grid{
     grid-template-columns:1fr 1fr
   }
+
 }
 
 @media(max-width:520px){
@@ -375,16 +266,19 @@ body.sistema-bloqueado>.modal{
   .grid{
     grid-template-columns:1fr
   }
+
 }
 
-@media(max-width:700px){
+/* Layout responsivo para celular */
+
+@media (max-width:700px){
 
   body{
     font-size:14px
   }
 
   header{
-    padding:16px
+    padding:14px 12px 16px
   }
 
   .header-top{
@@ -393,10 +287,11 @@ body.sistema-bloqueado>.modal{
   }
 
   header h1{
-    font-size:20px
+    font-size:19px;
+    line-height:1.18
   }
 
-  #btnSairSistema{
+  #btnSair{
     padding:9px 12px;
     font-size:13px;
     border-radius:8px
@@ -406,6 +301,14 @@ body.sistema-bloqueado>.modal{
     font-size:13px;
     line-height:1.35;
     margin-top:8px
+  }
+
+  header{
+    padding:16px
+  }
+
+  header h1{
+    font-size:20px
   }
 
   .container{
@@ -566,12 +469,122 @@ body.sistema-bloqueado>.modal{
   }
 }
 
-@media(max-width:700px){
+@media (max-width:700px){
 
   #tabela tr:not(.printer-group):has(input[type="radio"]:checked){
     border:2px solid #1976d2;
     background:#eef6ff
   }
+
+}
+
+/* Tela de login */
+
+.login-screen{
+  position:fixed;
+  inset:0;
+  background:linear-gradient(135deg,#1976d2,#0d47a1);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:9999
+}
+
+.login-box{
+  width:100%;
+  max-width:380px;
+  background:#fff;
+  border-radius:16px;
+  padding:30px;
+  box-shadow:0 12px 40px rgba(0,0,0,.25)
+}
+
+.login-box h1{
+  text-align:center;
+  margin:0 0 8px;
+  color:#1976d2;
+  font-size:25px
+}
+
+.login-box p{
+  text-align:center;
+  color:#666;
+  margin:0 0 24px
+}
+
+.login-box label{
+  display:block;
+  font-weight:600;
+  margin:12px 0 6px
+}
+
+.login-box input{
+  width:100%;
+  box-sizing:border-box;
+  padding:12px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:16px
+}
+
+.login-btn{
+  width:100%;
+  margin-top:20px;
+  padding:12px;
+  border:0;
+  border-radius:8px;
+  background:#1976d2;
+  color:#fff;
+  font-size:16px;
+  font-weight:700;
+  cursor:pointer
+}
+
+.login-error{
+  display:none;
+  color:#c62828;
+  text-align:center;
+  margin-top:12px;
+  font-size:14px
+}
+
+body.sistema-bloqueado>header,
+body.sistema-bloqueado>.container,
+body.sistema-bloqueado>.modal{
+  display:none
+}
+
+/* Gerenciamento de técnicos */
+
+#painelTecnicos{
+  display:none
+}
+
+.lista-tecnicos{
+  display:grid;
+  gap:10px
+}
+
+.tecnico-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:12px;
+  border:1px solid #ddd;
+  border-radius:8px;
+  background:#f8f9fa
+}
+
+.tecnico-info strong{
+  display:block;
+  font-size:15px
+}
+
+.tecnico-info small{
+  color:#666;
+  font-size:12px
 }
 
 @media(max-width:520px){
@@ -584,13 +597,12 @@ body.sistema-bloqueado>.modal{
   .tecnico-item button{
     width:100%
   }
+
 }
 </style>
 </head>
 
 <body class="sistema-bloqueado">
-
-<!-- LOGIN -->
 
 <div class="login-screen" id="loginScreen">
 
@@ -737,9 +749,8 @@ body.sistema-bloqueado>.modal{
     </div>
 
   </div>
-</div>
 
-<!-- CABEÇALHO -->
+</div>
 
 <header>
 
@@ -763,8 +774,6 @@ body.sistema-bloqueado>.modal{
 
 <div class="container">
 
-  <!-- CARDS -->
-
   <div class="cards">
 
     <div class="card">
@@ -783,8 +792,6 @@ body.sistema-bloqueado>.modal{
     </div>
 
   </div>
-
-  <!-- CADASTRO -->
 
   <div class="panel">
 
@@ -816,29 +823,12 @@ body.sistema-bloqueado>.modal{
 
           <select id="toner" required>
 
-            <option value="">
-              Selecione a cor
-            </option>
-
-            <option value="Preto">
-              Preto
-            </option>
-
-            <option value="Ciano">
-              Ciano
-            </option>
-
-            <option value="Magenta">
-              Magenta
-            </option>
-
-            <option value="Amarelo">
-              Amarelo
-            </option>
-
-            <option value="Colorido">
-              Colorido
-            </option>
+            <option value="">Selecione a cor</option>
+            <option value="Preto">Preto</option>
+            <option value="Ciano">Ciano</option>
+            <option value="Magenta">Magenta</option>
+            <option value="Amarelo">Amarelo</option>
+            <option value="Colorido">Colorido</option>
 
           </select>
 
@@ -846,15 +836,11 @@ body.sistema-bloqueado>.modal{
 
         <div>
 
-          <label>
-            Impressora cadastrada
-          </label>
+          <label>Impressora cadastrada</label>
 
           <select id="impressora" required>
 
-            <option value="">
-              Selecione a impressora
-            </option>
+            <option value="">Selecione a impressora</option>
 
           </select>
 
@@ -884,9 +870,7 @@ body.sistema-bloqueado>.modal{
 
         <div>
 
-          <label>
-            Quantidade em estoque
-          </label>
+          <label>Quantidade em estoque</label>
 
           <input
             id="quantidade"
@@ -906,9 +890,7 @@ body.sistema-bloqueado>.modal{
 
         <div class="full">
 
-          <label>
-            Observação
-          </label>
+          <label>Observação</label>
 
           <textarea
             id="observacao"
@@ -922,10 +904,7 @@ body.sistema-bloqueado>.modal{
 
       <div class="buttons">
 
-        <button
-          class="primary"
-          type="submit"
-        >
+        <button class="primary" type="submit">
           💾 Salvar toner
         </button>
 
@@ -942,8 +921,6 @@ body.sistema-bloqueado>.modal{
     </form>
 
   </div>
-
-  <!-- ESTOQUE -->
 
   <div class="panel">
 
@@ -1022,7 +999,6 @@ body.sistema-bloqueado>.modal{
             <th>Cor</th>
             <th>Qtd.</th>
             <th>Localização</th>
-            <th>Observação</th>
             <th>Ações</th>
           </tr>
 
@@ -1035,8 +1011,6 @@ body.sistema-bloqueado>.modal{
     </div>
 
   </div>
-
-  <!-- HISTÓRICO -->
 
   <div class="panel">
 
@@ -1082,8 +1056,6 @@ body.sistema-bloqueado>.modal{
 
   </div>
 
-  <!-- TÉCNICOS -->
-
   <div class="panel" id="painelTecnicos">
 
     <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap">
@@ -1110,16 +1082,16 @@ body.sistema-bloqueado>.modal{
       id="listaTecnicos"
       class="lista-tecnicos"
     >
+
       <div class="empty">
         Carregando...
       </div>
+
     </div>
 
   </div>
 
 </div>
-
-<!-- MODAL -->
 
 <div class="modal" id="modal">
 
@@ -1174,14 +1146,11 @@ body.sistema-bloqueado>.modal{
 
 <script>
 
-const LOGIN_USUARIO="admin";
-const CHAVE="estoque_toners_servidor";
+const LOGIN_USUARIO = "admin";
+const CHAVE = "estoque_toners_servidor";
 
 let tecnicos=[];
 let usuarioLogado=null;
-
-let selecionadoId=null;
-let tipoMov=null;
 
 let dados={
   toners:[],
@@ -1189,92 +1158,58 @@ let dados={
   impressoras:[]
 };
 
-const loginScreen=
-  document.getElementById("loginScreen");
-
-const loginForm=
-  document.getElementById("loginForm");
-
-const loginErro=
-  document.getElementById("loginErro");
-
-
-/* =====================================================
-   FUNÇÕES DE INTERFACE
-===================================================== */
+const loginScreen=document.getElementById("loginScreen");
+const loginForm=document.getElementById("loginForm");
+const loginErro=document.getElementById("loginErro");
 
 function liberarSistema(){
 
-  document.body.classList.remove(
-    "sistema-bloqueado"
-  );
-
+  document.body.classList.remove("sistema-bloqueado");
   loginScreen.style.display="none";
+
 }
 
 function bloquearSistema(){
 
-  document.body.classList.add(
-    "sistema-bloqueado"
-  );
-
+  document.body.classList.add("sistema-bloqueado");
   loginScreen.style.display="flex";
+
 }
 
 function mostrarCadastroTecnico(){
 
-  document.getElementById(
-    "loginArea"
-  ).style.display="none";
+  document.getElementById("loginArea").style.display="none";
 
-  document.getElementById(
-    "cadastroTecnicoArea"
-  ).style.display="block";
+  document.getElementById("cadastroTecnicoArea").style.display="block";
 
-  document.getElementById(
-    "cadastroErro"
-  ).style.display="none";
+  document.getElementById("cadastroErro").style.display="none";
 
-  document.getElementById(
-    "novoTecnicoNome"
-  ).focus();
+  document.getElementById("novoTecnicoNome").focus();
+
 }
 
 function mostrarLogin(){
 
-  document.getElementById(
-    "cadastroTecnicoArea"
-  ).style.display="none";
+  document.getElementById("cadastroTecnicoArea").style.display="none";
 
-  document.getElementById(
-    "loginArea"
-  ).style.display="block";
+  document.getElementById("loginArea").style.display="block";
 
-  document.getElementById(
-    "cadastroTecnicoForm"
-  ).reset();
+  document.getElementById("cadastroTecnicoForm").reset();
 
   loginErro.style.display="none";
+
 }
-
-
-/* =====================================================
-   API
-===================================================== */
 
 async function api(url,options={}){
 
-  const r=await fetch(
-    url,
-    {
-      credentials:"same-origin",
-      ...options,
-      headers:{
-        "Content-Type":"application/json",
-        ...(options.headers||{})
-      }
+  const r=await fetch(url,{
+    credentials:"same-origin",
+    ...options,
+    headers:{
+      "Content-Type":"application/json",
+      ...(options.headers||{})
     }
-  );
+  });
 
   let data={};
 
@@ -1285,90 +1220,31 @@ async function api(url,options={}){
   if(!r.ok){
 
     throw new Error(
-      data.error ||
-      "Erro de comunicação com o servidor."
+      data.error || "Erro de comunicação com o servidor."
     );
 
   }
 
   return data;
-}
-
-
-/* =====================================================
-   CORREÇÃO DAS IMPRESSORAS
-===================================================== */
-
-/*
-  Esta função transforma impressoras antigas que estejam
-  salvas como objetos em nomes de texto.
-
-  Exemplo:
-
-  {codigo:"01",nome:"HP 1020"}
-
-  vira:
-
-  "HP 1020"
-
-  Assim evita aparecer [object Object].
-*/
-
-function normalizarImpressoras(){
-
-  if(!Array.isArray(dados.impressoras)){
-    dados.impressoras=[];
-  }
-
-  dados.impressoras=
-    dados.impressoras
-      .map(p=>{
-
-        if(typeof p==="string"){
-          return p.trim();
-        }
-
-        if(p && typeof p==="object"){
-
-          return String(
-            p.nome ??
-            p.name ??
-            p.impressora ??
-            ""
-          ).trim();
-
-        }
-
-        return "";
-
-      })
-      .filter(Boolean);
-
-  /*
-    Remove duplicadas
-  */
-
-  dados.impressoras=[
-    ...new Set(dados.impressoras)
-  ];
 
 }
 
-
 /* =====================================================
-   CARREGAR ESTADO
-===================================================== */
+   CORREÇÃO DO [object Object]
+   ===================================================== */
 
 async function carregarEstado(){
 
   dados=await api("/api/state");
 
   if(!dados || typeof dados!=="object"){
+
     dados={
       toners:[],
       movimentacoes:[],
       impressoras:[]
     };
+
   }
 
   if(!Array.isArray(dados.toners)){
@@ -1384,85 +1260,85 @@ async function carregarEstado(){
   }
 
   /*
-    CORREÇÃO PRINCIPAL:
-    transforma objetos de impressoras em nomes.
+    Algumas impressoras podem estar salvas no banco
+    como objetos. Aqui transformamos somente o objeto
+    em seu nome para evitar [object Object].
   */
 
-  normalizarImpressoras();
+  dados.impressoras=dados.impressoras
+    .map(p=>{
+
+      if(typeof p==="string"){
+        return p.trim();
+      }
+
+      if(p && typeof p==="object"){
+
+        return String(
+          p.nome ??
+          p.name ??
+          p.impressora ??
+          ""
+        ).trim();
+
+      }
+
+      return "";
+
+    })
+    .filter(Boolean);
 
   /*
-    Também verifica impressoras existentes nos toners.
+    Caso algum toner também tenha a impressora
+    salva como objeto, transforma em nome.
   */
+
+  dados.toners=dados.toners.map(x=>{
+
+    if(
+      x.impressora &&
+      typeof x.impressora==="object"
+    ){
+
+      x.impressora=String(
+        x.impressora.nome ??
+        x.impressora.name ??
+        x.impressora.impressora ??
+        ""
+      ).trim();
+
+    }
+
+    return x;
+
+  });
 
   dados.toners.forEach(x=>{
 
     if(
-      x &&
-      x.impressora
+      x.impressora &&
+      !dados.impressoras.some(
+        p=>p.toLowerCase()===x.impressora.toLowerCase()
+      )
     ){
 
-      const nome=
-        typeof x.impressora==="string"
-          ? x.impressora
-          : (
-              x.impressora.nome ||
-              x.impressora.name ||
-              ""
-            );
-
-      if(
-        nome &&
-        !dados.impressoras.includes(nome)
-      ){
-        dados.impressoras.push(nome);
-      }
-
-      /*
-        Garante que o próprio toner também fique
-        com o nome da impressora em texto.
-      */
-
-      if(nome){
-        x.impressora=nome;
-      }
+      dados.impressoras.push(x.impressora);
 
     }
 
   });
 
-  normalizarImpressoras();
-
   renderImpressoras();
-
   renderTudo();
 
 }
 
+function salvarDados(){
 
-/* =====================================================
-   SALVAR
-===================================================== */
-
-async function salvarDados(){
-
-  /*
-    Antes de salvar, garante que não existam
-    objetos nas impressoras.
-  */
-
-  normalizarImpressoras();
-
-  try{
-
-    return await api(
-      "/api/state",
-      {
-        method:"PUT",
-        body:JSON.stringify(dados)
-      }
-    );
-
-  }catch(e){
+  return api("/api/state",{
+    method:"PUT",
+    body:JSON.stringify(dados)
+  }).catch(e=>{
 
     alert(
       "Não foi possível salvar no servidor: "+
@@ -1470,13 +1346,14 @@ async function salvarDados(){
     );
 
     throw e;
-  }
-}
 
+  });
+
+}
 
 /* =====================================================
    LOGIN
-===================================================== */
+   ===================================================== */
 
 loginForm.addEventListener(
   "submit",
@@ -1485,36 +1362,27 @@ loginForm.addEventListener(
     e.preventDefault();
 
     const usuario=
-      document
-        .getElementById("loginUsuario")
-        .value
-        .trim();
+      document.getElementById("loginUsuario").value.trim();
 
     const senha=
-      document
-        .getElementById("loginSenha")
-        .value;
+      document.getElementById("loginSenha").value;
 
     try{
 
-      const resposta=
-        await api(
-          "/api/login",
-          {
-            method:"POST",
-            body:JSON.stringify({
-              name:usuario,
-              password:senha,
-              stayLogged:
-                document
-                  .getElementById("ficarLogado")
-                  .checked
-            })
-          }
-        );
+      const resposta=await api(
+        "/api/login",
+        {
+          method:"POST",
+          body:JSON.stringify({
+            name:usuario,
+            password:senha,
+            stayLogged:
+              document.getElementById("ficarLogado").checked
+          })
+        }
+      );
 
-      usuarioLogado=
-        resposta.user;
+      usuarioLogado=resposta.user;
 
       await carregarEstado();
 
@@ -1524,28 +1392,22 @@ loginForm.addEventListener(
 
     }catch(err){
 
-      loginErro.textContent=
-        err.message;
+      loginErro.textContent=err.message;
 
       loginErro.style.display="block";
 
-      document
-        .getElementById("loginSenha")
-        .value="";
+      document.getElementById("loginSenha").value="";
 
-      document
-        .getElementById("loginSenha")
-        .focus();
+      document.getElementById("loginSenha").focus();
 
     }
 
   }
 );
 
-
 /* =====================================================
    CADASTRO DE TÉCNICO
-===================================================== */
+   ===================================================== */
 
 document
   .getElementById("cadastroTecnicoForm")
@@ -1556,30 +1418,23 @@ document
       e.preventDefault();
 
       const nome=
-        document
-          .getElementById("novoTecnicoNome")
-          .value
-          .trim();
+        document.getElementById("novoTecnicoNome")
+        .value.trim();
 
       const senha=
-        document
-          .getElementById("novoTecnicoSenha")
-          .value;
+        document.getElementById("novoTecnicoSenha")
+        .value;
 
       const senha2=
-        document
-          .getElementById("novoTecnicoSenha2")
-          .value;
+        document.getElementById("novoTecnicoSenha2")
+        .value;
 
       const senhaAdmin=
-        document
-          .getElementById("senhaAdminCadastro")
-          .value;
+        document.getElementById("senhaAdminCadastro")
+        .value;
 
       const erro=
-        document.getElementById(
-          "cadastroErro"
-        );
+        document.getElementById("cadastroErro");
 
       const mostrarErro=(msg)=>{
 
@@ -1661,20 +1516,17 @@ document
     }
   );
 
-
 /* =====================================================
    INICIAR SISTEMA
-===================================================== */
+   ===================================================== */
 
 async function iniciar(){
 
   try{
 
-    const resposta=
-      await api("/api/me");
+    const resposta=await api("/api/me");
 
-    usuarioLogado=
-      resposta.user;
+    usuarioLogado=resposta.user;
 
     await carregarEstado();
 
@@ -1692,22 +1544,17 @@ async function iniciar(){
 
 }
 
-
 /* =====================================================
    TÉCNICOS
-===================================================== */
+   ===================================================== */
 
 async function carregarTecnicos(){
 
   const painel=
-    document.getElementById(
-      "painelTecnicos"
-    );
+    document.getElementById("painelTecnicos");
 
   const lista=
-    document.getElementById(
-      "listaTecnicos"
-    );
+    document.getElementById("listaTecnicos");
 
   if(
     !usuarioLogado ||
@@ -1717,6 +1564,7 @@ async function carregarTecnicos(){
     painel.style.display="none";
 
     return;
+
   }
 
   painel.style.display="block";
@@ -1727,9 +1575,7 @@ async function carregarTecnicos(){
   try{
 
     const resposta=
-      await api(
-        "/api/technicians"
-      );
+      await api("/api/technicians");
 
     tecnicos=
       resposta.technicians || [];
@@ -1740,69 +1586,59 @@ async function carregarTecnicos(){
         '<div class="empty">Nenhum técnico cadastrado.</div>';
 
       return;
+
     }
 
     lista.innerHTML=
-      tecnicos
-        .map(t=>{
+      tecnicos.map(t=>{
 
-          const nomeSeguro=
-            String(t.name)
-              .replace(/\\/g,"\\\\")
-              .replace(/'/g,"\\'");
+        const nomeSeguro=
+          String(t.name)
+          .replace(/\\/g,"\\\\")
+          .replace(/'/g,"\\'");
 
-          return `
+        return `
 
-            <div class="tecnico-item">
+          <div class="tecnico-item">
 
-              <div class="tecnico-info">
+            <div class="tecnico-info">
 
-                <strong>
-                  👤 ${esc(t.name)}
-                </strong>
+              <strong>
+                👤 ${esc(t.name)}
+              </strong>
 
-                <small>
-                  Cadastrado em:
-                  ${
-                    t.created_at
-                      ? new Date(
-                          t.created_at
-                        ).toLocaleString("pt-BR")
-                      : "-"
-                  }
-                </small>
-
-              </div>
-
-              <button
-                type="button"
-                class="danger"
-                onclick="excluirTecnico('${t.id}','${nomeSeguro}')"
-              >
-                🗑️ Excluir
-              </button>
+              <small>
+                Cadastrado em:
+                ${new Date(t.created_at).toLocaleString("pt-BR")}
+              </small>
 
             </div>
 
-          `;
+            <button
+              type="button"
+              class="danger"
+              onclick="excluirTecnico('${t.id}','${nomeSeguro}')"
+            >
+              🗑️ Excluir
+            </button>
 
-        })
-        .join("");
+          </div>
+
+        `;
+
+      }).join("");
 
   }catch(err){
 
     lista.innerHTML=
-      `
-        <div class="empty">
-          Erro ao carregar técnicos:
-          ${esc(err.message)}
-        </div>
-      `;
+      `<div class="empty">
+        Erro ao carregar técnicos:
+        ${esc(err.message)}
+      </div>`;
 
   }
 
 }
-
 
 async function excluirTecnico(
   idTecnico,
@@ -1815,7 +1651,9 @@ async function excluirTecnico(
       `Ele não poderá mais entrar no sistema com essa conta.`
     )
   ){
+
     return;
+
   }
 
   try{
@@ -1844,10 +1682,9 @@ async function excluirTecnico(
 
 }
 
-
 /* =====================================================
    FUNÇÕES GERAIS
-===================================================== */
+   ===================================================== */
 
 function id(){
 
@@ -1856,10 +1693,9 @@ function id(){
 
 }
 
-
 function esc(s){
 
-  return String(s ?? "").replace(
+  return String(s??"").replace(
     /[&<>"']/g,
     m=>({
       '&':'&amp;',
@@ -1872,35 +1708,24 @@ function esc(s){
 
 }
 
-
 /* =====================================================
    IMPRESSORAS
-===================================================== */
+   ===================================================== */
 
 function renderImpressoras(){
 
-  const select=
-    document.getElementById(
-      "impressora"
-    );
+  const atual=impressora.value;
 
-  const atual=
-    select.value;
-
-  normalizarImpressoras();
-
-  select.innerHTML=
+  impressora.innerHTML=
     '<option value="">Selecione a impressora</option>'+
     dados.impressoras
-      .slice()
       .sort((a,b)=>
-        a.localeCompare(
-          b,
-          "pt-BR"
-        )
+        a.localeCompare(b,'pt-BR')
       )
       .map(nome=>
-        `<option value="${esc(nome)}">${esc(nome)}</option>`
+        `<option value="${esc(nome)}">
+          ${esc(nome)}
+        </option>`
       )
       .join("");
 
@@ -1909,77 +1734,60 @@ function renderImpressoras(){
     dados.impressoras.includes(atual)
   ){
 
-    select.value=atual;
+    impressora.value=atual;
 
   }
 
 }
 
-
-async function cadastrarImpressora(){
+function cadastrarImpressora(){
 
   const nome=
     prompt(
       "Digite o nome/modelo da impressora:"
     );
 
-  if(nome===null){
-    return;
-  }
+  if(!nome)return;
 
-  const n=
-    nome.trim();
+  const n=nome.trim();
 
-  if(!n){
-    return;
-  }
+  if(!n)return;
 
-  const existente=
-    dados.impressoras.find(
-      x=>
-        x.toLowerCase()===
-        n.toLowerCase()
-    );
-
-  if(existente){
+  if(
+    dados.impressoras.some(
+      x=>x.toLowerCase()===n.toLowerCase()
+    )
+  ){
 
     alert(
       "Essa impressora já está cadastrada."
     );
 
-    document.getElementById(
-      "impressora"
-    ).value=existente;
+    impressora.value=
+      dados.impressoras.find(
+        x=>x.toLowerCase()===n.toLowerCase()
+      );
 
     return;
+
   }
 
   dados.impressoras.push(n);
 
-  try{
+  salvarDados();
 
-    await salvarDados();
+  renderImpressoras();
 
-    renderImpressoras();
-
-    document.getElementById(
-      "impressora"
-    ).value=n;
-
-  }catch{}
+  impressora.value=n;
 
 }
 
-
-async function removerImpressora(){
+function removerImpressora(){
 
   const select=
-    document.getElementById(
-      "impressora"
-    );
+    document.getElementById("impressora");
 
-  const nome=
-    select.value;
+  const nome=select.value;
 
   if(!nome){
 
@@ -1988,12 +1796,12 @@ async function removerImpressora(){
     );
 
     return;
+
   }
 
   if(
     !confirm(
-      "Remover a impressora "+
-      nome+
+      "Remover a impressora "+nome+
       " da lista de impressoras cadastradas?\n\n"+
       "Os toners já cadastrados para ela não serão apagados."
     )
@@ -2005,90 +1813,51 @@ async function removerImpressora(){
 
   dados.impressoras=
     dados.impressoras.filter(
-      x=>
-        x.toLowerCase() !==
-        nome.toLowerCase()
+      x=>x.toLowerCase()!==nome.toLowerCase()
     );
 
-  try{
+  salvarDados();
 
-    await salvarDados();
+  renderImpressoras();
 
-    renderImpressoras();
-
-    select.value="";
-
-  }catch{}
+  select.value="";
 
 }
 
-
 /* =====================================================
    CADASTRO / EDIÇÃO DE TONER
-===================================================== */
+   ===================================================== */
 
 document
   .getElementById("tonerForm")
   .addEventListener(
     "submit",
-    async e=>{
+    e=>{
 
       e.preventDefault();
 
       const edit=
-        document
-          .getElementById("editId")
-          .value;
+        document.getElementById("editId").value;
 
       const obj={
 
-        codigo:
-          document
-            .getElementById("codigo")
-            .value
-            .trim(),
+        codigo:codigo.value.trim(),
 
-        toner:
-          document
-            .getElementById("toner")
-            .value
-            .trim(),
+        toner:toner.value.trim(),
 
-        impressora:
-          document
-            .getElementById("impressora")
-            .value
-            .trim(),
+        impressora:impressora.value.trim(),
 
-        quantidade:
-          Number(
-            document
-              .getElementById("quantidade")
-              .value
-          ),
+        quantidade:Number(
+          quantidade.value
+        ),
 
         localizacao:
           "Prefeitura de Grajaú-MA",
 
         observacao:
-          document
-            .getElementById("observacao")
-            .value
-            .trim()
+          observacao.value.trim()
 
       };
-
-
-      if(!obj.impressora){
-
-        alert(
-          "Selecione uma impressora."
-        );
-
-        return;
-
-      }
-
 
       if(
         !dados.impressoras.includes(
@@ -2101,7 +1870,6 @@ document
         );
 
       }
-
 
       if(edit){
 
@@ -2124,8 +1892,7 @@ document
         if(
           dados.toners.some(
             x=>
-              String(x.codigo)
-                .toLowerCase()===
+              x.codigo.toLowerCase()===
               obj.codigo.toLowerCase()
           )
         ){
@@ -2138,11 +1905,9 @@ document
 
         }
 
-
         obj.id=id();
 
         dados.toners.push(obj);
-
 
         if(obj.quantidade>0){
 
@@ -2176,20 +1941,14 @@ document
 
       }
 
+      salvarDados();
 
-      try{
+      limparFormulario();
 
-        await salvarDados();
-
-        limparFormulario();
-
-        renderTudo();
-
-      }catch{}
+      renderTudo();
 
     }
   );
-
 
 function limparFormulario(){
 
@@ -2197,22 +1956,15 @@ function limparFormulario(){
     .getElementById("tonerForm")
     .reset();
 
-  document
-    .getElementById("editId")
-    .value="";
+  editId.value="";
 
-  document
-    .getElementById("quantidade")
-    .value=0;
+  quantidade.value=0;
 
   document
     .getElementById("formTitle")
     .textContent="Cadastrar toner";
 
-  renderImpressoras();
-
 }
-
 
 function renderTudo(){
 
@@ -2224,52 +1976,30 @@ function renderTudo(){
 
 }
 
-
 function atualizarCards(){
 
-  document
-    .getElementById("totalTipos")
-    .textContent=
-      dados.toners.length;
+  totalTipos.textContent=
+    dados.toners.length;
 
-  document
-    .getElementById("totalUnidades")
-    .textContent=
-      dados.toners.reduce(
-        (s,x)=>
-          s+
-          Number(x.quantidade || 0),
-        0
-      );
+  totalUnidades.textContent=
+    dados.toners.reduce(
+      (s,x)=>s+Number(x.quantidade),
+      0
+    );
 
-  document
-    .getElementById("totalMov")
-    .textContent=
-      dados.movimentacoes.length;
+  totalMov.textContent=
+    dados.movimentacoes.length;
 
 }
 
-
 /* =====================================================
-   TABELA
-===================================================== */
+   TABELA DE ESTOQUE
+   ===================================================== */
 
 function renderTabela(){
 
-  const buscaEl=
-    document.getElementById(
-      "busca"
-    );
-
-  const tabelaEl=
-    document.getElementById(
-      "tabela"
-    );
-
   const q=
-    buscaEl.value
-      .toLowerCase();
-
+    busca.value.toLowerCase();
 
   const lista=
     dados.toners.filter(
@@ -2278,213 +2008,155 @@ function renderTabela(){
           x.codigo,
           x.toner,
           x.impressora,
-          x.localizacao,
-          x.observacao
+          x.localizacao
         ]
         .join(" ")
         .toLowerCase()
         .includes(q)
     );
 
-
   const grupos={};
-
 
   lista.forEach(x=>{
 
-    let nome="Sem impressora";
+    const chave=
+      x.impressora ||
+      "Sem impressora";
 
-    if(x.impressora){
-
-      if(typeof x.impressora==="string"){
-
-        nome=x.impressora;
-
-      }else if(
-        typeof x.impressora==="object"
-      ){
-
-        nome=
-          x.impressora.nome ||
-          x.impressora.name ||
-          "Sem impressora";
-
-      }
-
+    if(!grupos[chave]){
+      grupos[chave]=[];
     }
 
-
-    if(!grupos[nome]){
-      grupos[nome]=[];
-    }
-
-    grupos[nome].push(x);
+    grupos[chave].push(x);
 
   });
-
 
   const nomes=
     Object.keys(grupos);
 
-
   if(!nomes.length){
 
-    tabelaEl.innerHTML=
-      `
-        <tr>
-          <td colspan="7" class="empty">
-            Nenhum toner cadastrado.
-          </td>
-        </tr>
-      `;
+    tabela.innerHTML=
+      `<tr>
+        <td colspan="8" class="empty">
+          Nenhum toner cadastrado.
+        </td>
+      </tr>`;
 
     return;
 
   }
 
+  tabela.innerHTML=
+    nomes.map(nome=>{
 
-  tabelaEl.innerHTML=
-    nomes
-      .sort((a,b)=>
-        a.localeCompare(
-          b,
-          "pt-BR"
-        )
-      )
-      .map(nome=>{
+      const itens=
+        grupos[nome];
 
-        const itens=
-          grupos[nome];
+      return `
 
-        return `
+        <tr class="printer-group">
 
-          <tr class="printer-group">
+          <td
+            colspan="8"
+            style="background:#eaf2f8;font-weight:bold;font-size:15px;padding:12px"
+          >
+            🖨️ ${esc(nome)}
+          </td>
 
-            <td
-              colspan="7"
-              style="
-                background:#eaf2f8;
-                font-weight:bold;
-                font-size:15px;
-                padding:12px
-              "
-            >
-              🖨️ ${esc(nome)}
+        </tr>
+
+        ${itens.map(x=>`
+
+          <tr
+            onclick="if(!event.target.closest('button') && !event.target.closest('input')){selecionarLinha(this)}"
+          >
+
+            <td>
+
+              <input
+                type="radio"
+                name="sel"
+                onchange="selecionadoId='${x.id}'"
+              >
+
+            </td>
+
+            <td>
+              ${esc(x.codigo)}
+            </td>
+
+            <td>
+              ${esc(x.toner)}
+            </td>
+
+            <td>
+              ${x.quantidade}
+            </td>
+
+            <td>
+              ${esc(x.localizacao)}
+            </td>
+
+            <td>
+              ${esc(x.observacao)}
+            </td>
+
+            <td class="actions">
+
+              <button
+                class="primary"
+                onclick="editar('${x.id}')"
+              >
+                Editar
+              </button>
+
+              <button
+                class="danger"
+                onclick="excluir('${x.id}')"
+              >
+                Excluir
+              </button>
+
             </td>
 
           </tr>
 
-          ${itens.map(x=>`
+        `).join("")}
 
-            <tr
-              onclick="
-                if(
-                  !event.target.closest('button') &&
-                  !event.target.closest('input')
-                ){
-                  selecionarLinha(this)
-                }
-              "
-            >
+      `;
 
-              <td>
-
-                <input
-                  type="radio"
-                  name="sel"
-                  onchange="selecionadoId='${x.id}'"
-                >
-
-              </td>
-
-              <td>
-                ${esc(x.codigo)}
-              </td>
-
-              <td>
-                ${esc(x.toner)}
-              </td>
-
-              <td class="${Number(x.quantidade)<=3?'low':'ok'}">
-                ${Number(x.quantidade || 0)}
-              </td>
-
-              <td>
-                ${esc(x.localizacao)}
-              </td>
-
-              <td>
-                ${esc(x.observacao)}
-              </td>
-
-              <td class="actions">
-
-                <button
-                  class="primary"
-                  onclick="
-                    event.stopPropagation();
-                    editar('${x.id}')
-                  "
-                >
-                  Editar
-                </button>
-
-                <button
-                  class="danger"
-                  onclick="
-                    event.stopPropagation();
-                    excluir('${x.id}')
-                  "
-                >
-                  Excluir
-                </button>
-
-              </td>
-
-            </tr>
-
-          `).join("")}
-
-        `;
-
-      })
-      .join("");
+    }).join("");
 
 }
-
 
 function selecionarLinha(el){
 
   if(
-    el.classList.contains(
+    !el.classList.contains(
       "printer-group"
     )
   ){
-    return;
-  }
 
-  const radio=
-    el.querySelector(
-      'input[type="radio"]'
-    );
+    const radio=
+      el.querySelector(
+        'input[type="radio"]'
+      );
 
-  if(radio){
+    if(radio){
 
-    radio.checked=true;
+      radio.checked=true;
 
-    selecionadoId=
-      radio
-        .getAttribute("onchange")
-        .match(/'([^']+)'/)[1];
+      selecionadoId=
+        radio
+          .getAttribute("onchange")
+          .match(/'([^']+)'/)[1];
+
+    }
 
   }
 
 }
-
-
-/* =====================================================
-   EDITAR TONER
-===================================================== */
 
 function editar(idv){
 
@@ -2493,54 +2165,29 @@ function editar(idv){
       x=>x.id===idv
     );
 
-  if(!x){
-    return;
-  }
+  if(!x)return;
 
-  document
-    .getElementById("editId")
-    .value=x.id;
+  editId.value=x.id;
 
-  document
-    .getElementById("codigo")
-    .value=x.codigo;
+  codigo.value=x.codigo;
 
-  document
-    .getElementById("toner")
-    .value=x.toner;
+  toner.value=x.toner;
 
   renderImpressoras();
 
-  document
-    .getElementById("impressora")
-    .value=
-      typeof x.impressora==="string"
-        ? x.impressora
-        : (
-            x.impressora?.nome ||
-            x.impressora?.name ||
-            ""
-          );
+  impressora.value=x.impressora;
 
-  document
-    .getElementById("quantidade")
-    .value=
-      x.quantidade;
+  quantidade.value=
+    x.quantidade;
 
-  document
-    .getElementById("localizacao")
-    .value=
-      "Prefeitura de Grajaú-MA";
+  localizacao.value=
+    "Prefeitura de Grajaú-MA";
 
-  document
-    .getElementById("observacao")
-    .value=
-      x.observacao || "";
+  observacao.value=
+    x.observacao;
 
-  document
-    .getElementById("formTitle")
-    .textContent=
-      "Editar toner";
+  formTitle.textContent=
+    "Editar toner";
 
   window.scrollTo({
     top:0,
@@ -2549,21 +2196,14 @@ function editar(idv){
 
 }
 
-
-/* =====================================================
-   EXCLUIR TONER
-===================================================== */
-
-async function excluir(idv){
+function excluir(idv){
 
   const x=
     dados.toners.find(
       x=>x.id===idv
     );
 
-  if(!x){
-    return;
-  }
+  if(!x)return;
 
   if(
     confirm(
@@ -2576,22 +2216,17 @@ async function excluir(idv){
         x=>x.id!==idv
       );
 
-    try{
+    salvarDados();
 
-      await salvarDados();
-
-      renderTudo();
-
-    }catch{}
+    renderTudo();
 
   }
 
 }
 
-
 /* =====================================================
    MOVIMENTAÇÕES
-===================================================== */
+   ===================================================== */
 
 function movimentarSelecionado(tipo){
 
@@ -2602,6 +2237,7 @@ function movimentarSelecionado(tipo){
     );
 
     return;
+
   }
 
   const x=
@@ -2609,49 +2245,33 @@ function movimentarSelecionado(tipo){
       x=>x.id===selecionadoId
     );
 
-  if(!x){
-    return;
-  }
+  if(!x)return;
 
   tipoMov=tipo;
 
-  document
-    .getElementById("modal")
-    .classList.add("show");
+  modal.classList.add("show");
 
-  document
-    .getElementById("modalTitle")
-    .textContent=
-      tipo==="entrada"
-        ? "➕ Registrar entrada"
-        : "➖ Registrar saída";
+  modalTitle.textContent=
+    tipo==="entrada"
+      ? "➕ Registrar entrada"
+      : "➖ Registrar saída";
 
-  document
-    .getElementById("modalInfo")
-    .textContent=
-      `${x.codigo} — ${x.toner} | Estoque atual: ${x.quantidade}`;
+  modalInfo.textContent=
+    `${x.codigo} — ${x.toner} | Estoque atual: ${x.quantidade}`;
 
-  document
-    .getElementById("movQtd")
-    .value=1;
+  movQtd.value=1;
 
-  document
-    .getElementById("movObs")
-    .value="";
+  movObs.value="";
 
 }
-
 
 function fecharModal(){
 
-  document
-    .getElementById("modal")
-    .classList.remove("show");
+  modal.classList.remove("show");
 
 }
 
-
-async function confirmarMovimentacao(){
+function confirmarMovimentacao(){
 
   const x=
     dados.toners.find(
@@ -2659,11 +2279,7 @@ async function confirmarMovimentacao(){
     );
 
   const qtd=
-    Number(
-      document
-        .getElementById("movQtd")
-        .value
-    );
+    Number(movQtd.value);
 
   if(!x || qtd<1){
 
@@ -2672,6 +2288,7 @@ async function confirmarMovimentacao(){
     );
 
     return;
+
   }
 
   if(
@@ -2684,6 +2301,7 @@ async function confirmarMovimentacao(){
     );
 
     return;
+
   }
 
   x.quantidade +=
@@ -2714,34 +2332,22 @@ async function confirmarMovimentacao(){
     saldo:x.quantidade,
 
     observacao:
-      document
-        .getElementById("movObs")
-        .value
-        .trim()
+      movObs.value.trim()
 
   });
 
   dados.movimentacoes=
     dados.movimentacoes.slice(0,5);
 
-  try{
+  salvarDados();
 
-    await salvarDados();
+  fecharModal();
 
-    fecharModal();
-
-    renderTudo();
-
-  }catch{}
+  renderTudo();
 
 }
 
-
-/* =====================================================
-   LIMPAR HISTÓRICO
-===================================================== */
-
-async function limparHistorico(){
+function limparHistorico(){
 
   if(!dados.movimentacoes.length){
 
@@ -2750,6 +2356,7 @@ async function limparHistorico(){
     );
 
     return;
+
   }
 
   if(
@@ -2760,31 +2367,17 @@ async function limparHistorico(){
 
     dados.movimentacoes=[];
 
-    try{
+    salvarDados();
 
-      await salvarDados();
-
-      renderTudo();
-
-    }catch{}
+    renderTudo();
 
   }
 
 }
 
-
-/* =====================================================
-   HISTÓRICO
-===================================================== */
-
 function renderHistorico(){
 
-  const el=
-    document.getElementById(
-      "historico"
-    );
-
-  el.innerHTML=
+  historico.innerHTML=
     dados.movimentacoes.length
 
       ? dados.movimentacoes
@@ -2794,17 +2387,11 @@ function renderHistorico(){
             <tr>
 
               <td>
-                ${
-                  m.data
-                    ? new Date(
-                        m.data
-                      ).toLocaleString("pt-BR")
-                    : "-"
-                }
+                ${new Date(m.data).toLocaleString("pt-BR")}
               </td>
 
               <td>
-                ${esc(m.tipo)}
+                ${m.tipo}
               </td>
 
               <td>
@@ -2829,35 +2416,23 @@ function renderHistorico(){
           .join("")
 
       : `
-
         <tr>
-
-          <td
-            colspan="6"
-            class="empty"
-          >
+          <td colspan="6" class="empty">
             Nenhuma movimentação registrada.
           </td>
-
         </tr>
-
       `;
 
 }
 
-
 /* =====================================================
    IMPRESSÃO
-===================================================== */
+   ===================================================== */
 
 function imprimirEstoque(){
 
   const q=
-    document
-      .getElementById("busca")
-      .value
-      .toLowerCase();
-
+    busca.value.toLowerCase();
 
   const lista=
     dados.toners.filter(
@@ -2866,40 +2441,20 @@ function imprimirEstoque(){
           x.codigo,
           x.toner,
           x.impressora,
-          x.localizacao,
-          x.observacao
+          x.localizacao
         ]
         .join(" ")
         .toLowerCase()
         .includes(q)
     );
 
-
   const grupos={};
-
 
   lista.forEach(x=>{
 
-    let nome=
+    const nome=
+      x.impressora ||
       "Impressora não informada";
-
-    if(typeof x.impressora==="string"){
-
-      nome=
-        x.impressora ||
-        "Impressora não informada";
-
-    }else if(
-      x.impressora &&
-      typeof x.impressora==="object"
-    ){
-
-      nome=
-        x.impressora.nome ||
-        x.impressora.name ||
-        "Impressora não informada";
-
-    }
 
     if(!grupos[nome]){
       grupos[nome]=[];
@@ -2908,7 +2463,6 @@ function imprimirEstoque(){
     grupos[nome].push(x);
 
   });
-
 
   const ordemCores={
 
@@ -2920,107 +2474,99 @@ function imprimirEstoque(){
 
   };
 
-
   const nomes=
     Object.keys(grupos)
-      .sort((a,b)=>
-        a.localeCompare(
-          b,
-          "pt-BR"
-        )
+      .sort(
+        (a,b)=>
+          a.localeCompare(
+            b,
+            "pt-BR"
+          )
       );
 
-
   const blocos=
-    nomes
-      .map(nome=>{
+    nomes.map(nome=>{
 
-        const itens=
-          grupos[nome].sort(
-            (a,b)=>{
+      const itens=
+        grupos[nome].sort(
+          (a,b)=>{
 
-              const ca=
-                ordemCores[a.toner]||99;
+            const ca=
+              ordemCores[a.toner]||99;
 
-              const cb=
-                ordemCores[b.toner]||99;
+            const cb=
+              ordemCores[b.toner]||99;
 
-              return ca-cb ||
-                String(a.toner)
-                  .localeCompare(
-                    String(b.toner),
-                    "pt-BR"
-                  );
+            return ca-cb ||
+              a.toner.localeCompare(
+                b.toner,
+                "pt-BR"
+              );
 
-            }
-          );
+          }
+        );
 
+      return `
 
-        return `
+        <section class="impressora">
 
-          <section class="impressora">
+          <h3>
+            🖨️ ${esc(nome)}
+          </h3>
 
-            <h3>
-              🖨️ ${esc(nome)}
-            </h3>
+          <table>
 
-            <table>
+            <thead>
 
-              <thead>
+              <tr>
+                <th>Código</th>
+                <th>Cor</th>
+                <th>Quantidade</th>
+                <th>Observação</th>
+              </tr>
 
-                <tr>
-                  <th>Código</th>
-                  <th>Cor</th>
-                  <th>Quantidade</th>
-                  <th>Observação</th>
-                </tr>
+            </thead>
 
-              </thead>
+            <tbody>
 
-              <tbody>
+              ${itens.map(x=>{
 
-                ${itens.map(x=>{
+                const baixo=
+                  Number(x.quantidade)<=3;
 
-                  const baixo=
-                    Number(x.quantidade)<=3;
+                return `
+                  <tr class="${baixo?'estoque-baixo':''}">
 
-                  return `
+                    <td>
+                      ${esc(x.codigo)}
+                    </td>
 
-                    <tr class="${baixo?'estoque-baixo':''}">
+                    <td>
+                      ${esc(x.toner)}
+                    </td>
 
-                      <td>
-                        ${esc(x.codigo)}
-                      </td>
+                    <td>
+                      ${x.quantidade}
+                    </td>
 
-                      <td>
-                        ${esc(x.toner)}
-                      </td>
+                    <td>
+                      ${esc(x.observacao)}
+                    </td>
 
-                      <td>
-                        ${x.quantidade}
-                      </td>
+                  </tr>
+                `;
 
-                      <td>
-                        ${esc(x.observacao)}
-                      </td>
+              }).join("")}
 
-                    </tr>
+            </tbody>
 
-                  `;
+          </table>
 
-                }).join("")}
+        </section>
 
-              </tbody>
+      `;
 
-            </table>
-
-          </section>
-
-        `;
-
-      })
-      .join("");
-
+    }).join("");
 
   const pedidos=
     lista
@@ -3030,33 +2576,14 @@ function imprimirEstoque(){
       .sort(
         (a,b)=>{
 
-          const ia=
-            typeof a.impressora==="string"
-              ? a.impressora
-              : (
-                  a.impressora?.nome ||
-                  a.impressora?.name ||
-                  ""
-                );
-
-          const ib=
-            typeof b.impressora==="string"
-              ? b.impressora
-              : (
-                  b.impressora?.nome ||
-                  b.impressora?.name ||
-                  ""
-                );
-
           const pa=
-            ia.localeCompare(
-              ib,
+            (a.impressora||"")
+            .localeCompare(
+              b.impressora||"",
               "pt-BR"
             );
 
-          if(pa!==0){
-            return pa;
-          }
+          if(pa!==0)return pa;
 
           const ca=
             ordemCores[a.toner]||99;
@@ -3065,41 +2592,21 @@ function imprimirEstoque(){
             ordemCores[b.toner]||99;
 
           return ca-cb ||
-            String(a.toner)
-              .localeCompare(
-                String(b.toner),
-                "pt-BR"
-              );
+            a.toner.localeCompare(
+              b.toner,
+              "pt-BR"
+            );
 
         }
       );
 
-
   const gruposPedidos={};
-
 
   pedidos.forEach(x=>{
 
-    let nome=
+    const nome=
+      x.impressora ||
       "Impressora não informada";
-
-    if(typeof x.impressora==="string"){
-
-      nome=
-        x.impressora ||
-        "Impressora não informada";
-
-    }else if(
-      x.impressora &&
-      typeof x.impressora==="object"
-    ){
-
-      nome=
-        x.impressora.nome ||
-        x.impressora.name ||
-        "Impressora não informada";
-
-    }
 
     if(!gruposPedidos[nome]){
       gruposPedidos[nome]=[];
@@ -3109,14 +2616,14 @@ function imprimirEstoque(){
 
   });
 
-
   const pedidosHtml=
     Object.keys(gruposPedidos)
-      .sort((a,b)=>
-        a.localeCompare(
-          b,
-          "pt-BR"
-        )
+      .sort(
+        (a,b)=>
+          a.localeCompare(
+            b,
+            "pt-BR"
+          )
       )
       .map(nome=>`
 
@@ -3144,24 +2651,12 @@ function imprimirEstoque(){
       `)
       .join("");
 
-
   const janela=
     window.open(
       "",
       "_blank",
       "width=1000,height=700"
     );
-
-
-  if(!janela){
-
-    alert(
-      "O navegador bloqueou a janela de impressão. Permita pop-ups para este site."
-    );
-
-    return;
-  }
-
 
   janela.document.write(`
 
@@ -3226,8 +2721,7 @@ table{
   font-size:12px
 }
 
-th,
-td{
+th,td{
   border:1px solid #999;
   padding:7px;
   text-align:left
@@ -3300,7 +2794,6 @@ th{
 }
 
 </style>
-
 </head>
 
 <body>
@@ -3328,18 +2821,15 @@ Prefeitura de Grajaú-MA
   <span>
     Total de unidades:
     ${lista.reduce(
-      (a,x)=>
-        a+
-        Number(x.quantidade || 0),
+      (a,x)=>a+Number(x.quantidade),
       0
     )}
   </span>
 
 </div>
 
-${
-  blocos ||
-  '<p style="text-align:center">Nenhum toner encontrado.</p>'
+${blocos ||
+'<p style="text-align:center">Nenhum toner encontrado.</p>'
 }
 
 <section class="pedidos">
@@ -3348,10 +2838,10 @@ ${
     📋 PEDIDOS DE NOVOS TONERS
   </h2>
 
-  ${
-    pedidosHtml ||
-    '<div class="vazio">Nenhum toner precisa ser solicitado no momento.</div>'
-  }
+${
+pedidosHtml ||
+'<div class="vazio">Nenhum toner precisa ser solicitado no momento.</div>'
+}
 
 </section>
 
@@ -3368,77 +2858,41 @@ ${
   janela.document.close();
 
   janela.onload=function(){
-
     janela.print();
-
   };
 
 }
 
-
 /* =====================================================
-   CSV
+CSV / BACKUP
 ===================================================== */
-
-function csvValor(valor){
-
-  return `"${String(valor ?? "")
-    .replaceAll('"','""')}"`;
-
-}
-
 
 function exportarCSV(){
 
   const cab=
     "Código;Cor;Impressora;Quantidade;Localização;Observação\n";
 
-
   const linhas=
     dados.toners
-      .map(x=>{
-
-        let impressora="";
-
-        if(
-          typeof x.impressora==="string"
-        ){
-
-          impressora=x.impressora;
-
-        }else if(
-          x.impressora &&
-          typeof x.impressora==="object"
-        ){
-
-          impressora=
-            x.impressora.nome ||
-            x.impressora.name ||
-            "";
-
-        }
-
-
-        return [
-
-          x.codigo,
-          x.toner,
-          impressora,
-          x.quantidade,
-          x.localizacao,
-          x.observacao
-
-        ];
-
-      })
+      .map(x=>[
+        x.codigo,
+        x.toner,
+        x.impressora,
+        x.quantidade,
+        x.localizacao,
+        x.observacao
+      ])
       .map(
-        valores=>
-          valores
-            .map(csvValor)
+        v=>
+          v
+            .map(
+              v=>
+                `"${String(v??"")
+                  .replaceAll('"','""')}"`
+            )
             .join(";")
       )
       .join("\n");
-
 
   baixar(
     "\uFEFF"+cab+linhas,
@@ -3447,11 +2901,6 @@ function exportarCSV(){
   );
 
 }
-
-
-/* =====================================================
-   BACKUP
-===================================================== */
 
 function backup(){
 
@@ -3467,7 +2916,6 @@ function backup(){
 
 }
 
-
 function baixar(
   conteudo,
   nome,
@@ -3477,7 +2925,7 @@ function baixar(
   const a=
     document.createElement("a");
 
-  const url=
+  a.href=
     URL.createObjectURL(
       new Blob(
         [conteudo],
@@ -3485,42 +2933,27 @@ function baixar(
       )
     );
 
-  a.href=url;
-
   a.download=nome;
-
-  document.body.appendChild(a);
 
   a.click();
 
-  a.remove();
-
-  setTimeout(
-    ()=>URL.revokeObjectURL(url),
-    1000
+  URL.revokeObjectURL(
+    a.href
   );
 
 }
-
-
-/* =====================================================
-   RESTAURAR BACKUP
-===================================================== */
 
 function restaurarBackup(e){
 
   const arq=
     e.target.files[0];
 
-  if(!arq){
-    return;
-  }
+  if(!arq)return;
 
   const r=
     new FileReader();
 
-
-  r.onload=async ()=>{
+  r.onload=()=>{
 
     try{
 
@@ -3529,31 +2962,14 @@ function restaurarBackup(e){
           r.result
         );
 
-
       if(
-        !Array.isArray(
-          novo.toners
-        ) ||
-        !Array.isArray(
-          novo.movimentacoes
-        )
+        !Array.isArray(novo.toners) ||
+        !Array.isArray(novo.movimentacoes)
       ){
 
         throw Error();
 
       }
-
-
-      if(
-        !Array.isArray(
-          novo.impressoras
-        )
-      ){
-
-        novo.impressoras=[];
-
-      }
-
 
       if(
         confirm(
@@ -3563,48 +2979,61 @@ function restaurarBackup(e){
 
         dados=novo;
 
-        normalizarImpressoras();
-
-
         /*
-          Corrige também as impressoras dos toners
-          caso o backup tenha objetos.
+          Correção também para backups que tenham
+          impressoras salvas como objetos.
         */
 
-        dados.toners.forEach(x=>{
+        if(!Array.isArray(dados.impressoras)){
+          dados.impressoras=[];
+        }
 
-          if(
-            x.impressora &&
-            typeof x.impressora==="object"
-          ){
+        dados.impressoras=
+          dados.impressoras
+            .map(p=>{
 
-            x.impressora=
-              x.impressora.nome ||
-              x.impressora.name ||
-              "";
+              if(typeof p==="string"){
+                return p.trim();
+              }
 
-          }
+              if(p && typeof p==="object"){
 
-          if(
-            x.impressora &&
-            !dados.impressoras.includes(
-              x.impressora
-            )
-          ){
+                return String(
+                  p.nome ??
+                  p.name ??
+                  p.impressora ??
+                  ""
+                ).trim();
 
-            dados.impressoras.push(
-              x.impressora
-            );
+              }
 
-          }
+              return "";
 
-        });
+            })
+            .filter(Boolean);
 
+        dados.toners=
+          dados.toners.map(x=>{
 
-        normalizarImpressoras();
+            if(
+              x.impressora &&
+              typeof x.impressora==="object"
+            ){
 
+              x.impressora=String(
+                x.impressora.nome ??
+                x.impressora.name ??
+                x.impressora.impressora ??
+                ""
+              ).trim();
 
-        await salvarDados();
+            }
+
+            return x;
+
+          });
+
+        salvarDados();
 
         renderImpressoras();
 
@@ -3616,7 +3045,7 @@ function restaurarBackup(e){
 
       }
 
-    }catch(err){
+    }catch{
 
       alert(
         "Arquivo de backup inválido."
@@ -3628,14 +3057,12 @@ function restaurarBackup(e){
 
   };
 
-
   r.readAsText(arq);
 
 }
 
-
 /* =====================================================
-   SAIR
+SAIR
 ===================================================== */
 
 async function sairSistema(){
@@ -3651,18 +3078,13 @@ async function sairSistema(){
 
   }catch{}
 
-
   usuarioLogado=null;
 
   tecnicos=[];
 
-
   document
-    .getElementById(
-      "painelTecnicos"
-    )
+    .getElementById("painelTecnicos")
     .style.display="none";
-
 
   dados={
     toners:[],
@@ -3670,30 +3092,22 @@ async function sairSistema(){
     impressoras:[]
   };
 
-
   document
-    .getElementById(
-      "loginForm"
-    )
+    .getElementById("loginForm")
     .reset();
-
 
   mostrarLogin();
 
   bloquearSistema();
 
-
   document
-    .getElementById(
-      "loginUsuario"
-    )
+    .getElementById("loginUsuario")
     .focus();
 
 }
 
-
 /* =====================================================
-   INICIAR
+INICIAR
 ===================================================== */
 
 iniciar();
