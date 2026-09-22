@@ -999,6 +999,7 @@ body.sistema-bloqueado>.modal{
             <th>Cor</th>
             <th>Qtd.</th>
             <th>Localização</th>
+                <th>Observação</th>
             <th>Ações</th>
           </tr>
 
@@ -1151,6 +1152,8 @@ const CHAVE = "estoque_toners_servidor";
 
 let tecnicos=[];
 let usuarioLogado=null;
+let selecionadoId=null;
+let tipoMov=null;
 
 let dados={
   toners:[],
@@ -1161,6 +1164,25 @@ let dados={
 const loginScreen=document.getElementById("loginScreen");
 const loginForm=document.getElementById("loginForm");
 const loginErro=document.getElementById("loginErro");
+const codigo=document.getElementById("codigo");
+const toner=document.getElementById("toner");
+const impressora=document.getElementById("impressora");
+const quantidade=document.getElementById("quantidade");
+const localizacao=document.getElementById("localizacao");
+const observacao=document.getElementById("observacao");
+const editId=document.getElementById("editId");
+const formTitle=document.getElementById("formTitle");
+const busca=document.getElementById("busca");
+const tabela=document.querySelector("#tabela");
+const historico=document.getElementById("historico");
+const totalTipos=document.getElementById("totalTipos");
+const totalUnidades=document.getElementById("totalUnidades");
+const totalMov=document.getElementById("totalMov");
+const modal=document.getElementById("modal");
+const modalTitle=document.getElementById("modalTitle");
+const modalInfo=document.getElementById("modalInfo");
+const movQtd=document.getElementById("movQtd");
+const movObs=document.getElementById("movObs");
 
 function liberarSistema(){
 
@@ -1233,6 +1255,21 @@ async function api(url,options={}){
    CORREÇÃO DO [object Object]
    ===================================================== */
 
+function normalizarImpressora(valor){
+  if(typeof valor === "string") return valor.trim();
+  if(valor && typeof valor === "object"){
+    const candidatos=[valor.nome,valor.name,valor.modelo,valor.model,valor.descricao,valor.description,valor.label,valor.value,valor.impressora];
+    for(const candidato of candidatos){
+      if(typeof candidato === "string" && candidato.trim()) return candidato.trim();
+      if(candidato && typeof candidato === "object"){
+        const nome=normalizarImpressora(candidato);
+        if(nome) return nome;
+      }
+    }
+  }
+  return "";
+}
+
 async function carregarEstado(){
 
   dados=await api("/api/state");
@@ -1266,26 +1303,7 @@ async function carregarEstado(){
   */
 
   dados.impressoras=dados.impressoras
-    .map(p=>{
-
-      if(typeof p==="string"){
-        return p.trim();
-      }
-
-      if(p && typeof p==="object"){
-
-        return String(
-          p.nome ??
-          p.name ??
-          p.impressora ??
-          ""
-        ).trim();
-
-      }
-
-      return "";
-
-    })
+    .map(normalizarImpressora)
     .filter(Boolean);
 
   /*
@@ -1300,12 +1318,7 @@ async function carregarEstado(){
       typeof x.impressora==="object"
     ){
 
-      x.impressora=String(
-        x.impressora.nome ??
-        x.impressora.name ??
-        x.impressora.impressora ??
-        ""
-      ).trim();
+      x.impressora=normalizarImpressora(x.impressora);
 
     }
 
@@ -1740,7 +1753,7 @@ function renderImpressoras(){
 
 }
 
-function cadastrarImpressora(){
+async function cadastrarImpressora(){
 
   const nome=
     prompt(
@@ -1774,7 +1787,7 @@ function cadastrarImpressora(){
 
   dados.impressoras.push(n);
 
-  salvarDados();
+  await salvarDados();
 
   renderImpressoras();
 
@@ -1782,7 +1795,7 @@ function cadastrarImpressora(){
 
 }
 
-function removerImpressora(){
+async function removerImpressora(){
 
   const select=
     document.getElementById("impressora");
@@ -1816,7 +1829,7 @@ function removerImpressora(){
       x=>x.toLowerCase()!==nome.toLowerCase()
     );
 
-  salvarDados();
+  await salvarDados();
 
   renderImpressoras();
 
@@ -1832,7 +1845,7 @@ document
   .getElementById("tonerForm")
   .addEventListener(
     "submit",
-    e=>{
+    async e=>{
 
       e.preventDefault();
 
@@ -1941,7 +1954,7 @@ document
 
       }
 
-      salvarDados();
+      await salvarDados();
 
       limparFormulario();
 
@@ -2038,7 +2051,7 @@ function renderTabela(){
 
     tabela.innerHTML=
       `<tr>
-        <td colspan="8" class="empty">
+        <td colspan="7" class="empty">
           Nenhum toner cadastrado.
         </td>
       </tr>`;
@@ -2058,7 +2071,7 @@ function renderTabela(){
         <tr class="printer-group">
 
           <td
-            colspan="8"
+            colspan="7"
             style="background:#eaf2f8;font-weight:bold;font-size:15px;padding:12px"
           >
             🖨️ ${esc(nome)}
@@ -2271,7 +2284,7 @@ function fecharModal(){
 
 }
 
-function confirmarMovimentacao(){
+async function confirmarMovimentacao(){
 
   const x=
     dados.toners.find(
@@ -2336,10 +2349,7 @@ function confirmarMovimentacao(){
 
   });
 
-  dados.movimentacoes=
-    dados.movimentacoes.slice(0,5);
-
-  salvarDados();
+  await salvarDados();
 
   fecharModal();
 
@@ -3020,12 +3030,7 @@ function restaurarBackup(e){
               typeof x.impressora==="object"
             ){
 
-              x.impressora=String(
-                x.impressora.nome ??
-                x.impressora.name ??
-                x.impressora.impressora ??
-                ""
-              ).trim();
+              x.impressora=normalizarImpressora(x.impressora);
 
             }
 
@@ -3079,6 +3084,8 @@ async function sairSistema(){
   }catch{}
 
   usuarioLogado=null;
+  selecionadoId=null;
+  tipoMov=null;
 
   tecnicos=[];
 
