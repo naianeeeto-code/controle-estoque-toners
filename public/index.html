@@ -599,6 +599,7 @@ body.sistema-bloqueado>.modal{
   }
 
 }
+.seta-grupo{display:inline-block;width:18px;margin-right:4px;font-size:12px;}
 </style>
 </head>
 
@@ -2011,136 +2012,73 @@ function atualizarCards(){
 
 function renderTabela(){
 
-  const q=
-    busca.value.toLowerCase();
+  const q=busca.value.toLowerCase();
 
-  const lista=
-    dados.toners.filter(
-      x=>
-        [
-          x.codigo,
-          x.toner,
-          x.impressora,
-          x.localizacao
-        ]
-        .join(" ")
-        .toLowerCase()
-        .includes(q)
-    );
+  const lista=dados.toners.filter(x=>[
+    x.codigo,
+    x.toner,
+    x.impressora,
+    x.localizacao
+  ].join(" ").toLowerCase().includes(q));
 
   const grupos={};
 
   lista.forEach(x=>{
-
-    const chave=
-      x.impressora ||
-      "Sem impressora";
-
-    if(!grupos[chave]){
-      grupos[chave]=[];
-    }
-
+    const chave=x.impressora || "Sem impressora";
+    if(!grupos[chave]) grupos[chave]=[];
     grupos[chave].push(x);
-
   });
 
-  const nomes=
-    Object.keys(grupos);
+  const nomes=Object.keys(grupos);
 
   if(!nomes.length){
-
-    tabela.innerHTML=
-      `<tr>
-        <td colspan="7" class="empty">
-          Nenhum toner cadastrado.
-        </td>
-      </tr>`;
-
+    tabela.innerHTML=`<tr><td colspan="7" class="empty">Nenhum toner cadastrado.</td></tr>`;
     return;
-
   }
 
-  tabela.innerHTML=
-    nomes.map(nome=>{
+  tabela.innerHTML=nomes.map((nome,index)=>{
 
-      const itens=
-        grupos[nome];
+    const itens=grupos[nome];
+    const grupoId=`grupo-impressora-${index}`;
 
-      return `
+    return `
+      <tr class="printer-group" onclick="toggleGrupo('${grupoId}', this)" style="cursor:pointer">
+        <td colspan="7" style="background:#eaf2f8;font-weight:bold;font-size:15px;padding:12px">
+          <span class="seta-grupo">▶</span> 🖨️ ${esc(nome)}
+        </td>
+      </tr>
 
-        <tr class="printer-group">
-
-          <td
-            colspan="7"
-            style="background:#eaf2f8;font-weight:bold;font-size:15px;padding:12px"
-          >
-            🖨️ ${esc(nome)}
+      ${itens.map(x=>`
+        <tr class="printer-item ${grupoId}" style="display:none"
+          onclick="if(!event.target.closest('button') && !event.target.closest('input')){selecionarLinha(this)}">
+          <td>
+            <input type="radio" name="sel" onchange="selecionadoId='${x.id}'">
           </td>
-
+          <td>${esc(x.codigo)}</td>
+          <td>${esc(x.toner)}</td>
+          <td>${x.quantidade}</td>
+          <td>${esc(x.localizacao)}</td>
+          <td>${esc(x.observacao)}</td>
+          <td class="actions">
+            <button class="primary" onclick="editar('${x.id}')">Editar</button>
+            <button class="danger" onclick="excluir('${x.id}')">Excluir</button>
+          </td>
         </tr>
+      `).join("")}
+    `;
+  }).join("");
+}
 
-        ${itens.map(x=>`
+function toggleGrupo(grupoId, linha){
+  const itens=document.querySelectorAll('.' + grupoId);
+  const aberto=itens.length && itens[0].style.display !== 'none';
 
-          <tr
-            onclick="if(!event.target.closest('button') && !event.target.closest('input')){selecionarLinha(this)}"
-          >
+  itens.forEach(item=>{
+    item.style.display=aberto ? 'none' : '';
+  });
 
-            <td>
-
-              <input
-                type="radio"
-                name="sel"
-                onchange="selecionadoId='${x.id}'"
-              >
-
-            </td>
-
-            <td>
-              ${esc(x.codigo)}
-            </td>
-
-            <td>
-              ${esc(x.toner)}
-            </td>
-
-            <td>
-              ${x.quantidade}
-            </td>
-
-            <td>
-              ${esc(x.localizacao)}
-            </td>
-
-            <td>
-              ${esc(x.observacao)}
-            </td>
-
-            <td class="actions">
-
-              <button
-                class="primary"
-                onclick="editar('${x.id}')"
-              >
-                Editar
-              </button>
-
-              <button
-                class="danger"
-                onclick="excluir('${x.id}')"
-              >
-                Excluir
-              </button>
-
-            </td>
-
-          </tr>
-
-        `).join("")}
-
-      `;
-
-    }).join("");
-
+  const seta=linha.querySelector('.seta-grupo');
+  if(seta) seta.textContent=aberto ? '▶' : '▼';
 }
 
 function selecionarLinha(el){
